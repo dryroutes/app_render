@@ -13,6 +13,15 @@ st.title("🚶‍♂️ Calculador de rutas sobre el grafo por dirección (con a
 # ----------------------------------------------------
 # FUNCIONES AUXILIARES
 # ----------------------------------------------------
+def reverse_geocode(lat, lon):
+    try:
+        url = f"https://nominatim.openstreetmap.org/reverse?format=json&lat={lat}&lon={lon}&zoom=18&addressdetails=1"
+        headers = {"User-Agent": "grafo-app"}
+        r = requests.get(url, headers=headers, timeout=5)
+        data = r.json()
+        return data.get("display_name", "Ubicación desconocida")
+    except:
+        return "Ubicación desconocida"
 
 def distancia_coords(lat1, lon1, lat2, lon2):
     R = 6371000
@@ -166,9 +175,14 @@ if st.session_state.grafo:
         y1, x1 = G.nodes[u]["y"], G.nodes[u]["x"]
         y2, x2 = G.nodes[v]["y"], G.nodes[v]["x"]
         folium.PolyLine(locations=[(y1, x1), (y2, x2)], color="lightgray", weight=1).add_to(m)
-
-    folium.Marker([lat1, lon1], tooltip="Origen", icon=folium.Icon(color="green")).add_to(m)
-    folium.Marker([lat2, lon2], tooltip="Destino", icon=folium.Icon(color="red")).add_to(m)
+        real_lat1, real_lon1 = G.nodes[id1]["y"], G.nodes[id1]["x"]
+        real_lat2, real_lon2 = G.nodes[id2]["y"], G.nodes[id2]["x"]
+        
+        dir1 = reverse_geocode(real_lat1, real_lon1)
+        dir2 = reverse_geocode(real_lat2, real_lon2)
+        
+        folium.Marker([real_lat1, real_lon1], tooltip=f"Origen real:\n{dir1}", icon=folium.Icon(color="green")).add_to(m)
+        folium.Marker([real_lat2, real_lon2], tooltip=f"Destino real:\n{dir2}", icon=folium.Icon(color="red")).add_to(m)
 
     try:
         # Intentar primero como dirigido
