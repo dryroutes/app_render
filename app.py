@@ -141,10 +141,6 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
 
     m = folium.Map(location=[(y1 + y2)/2, (x1 + x2)/2], zoom_start=14)
 
-    for u, v in G.edges():
-        lat1, lon1 = G.nodes[u]["y"], G.nodes[u]["x"]
-        lat2, lon2 = G.nodes[v]["y"], G.nodes[v]["x"]
-        folium.PolyLine([(lat1, lon1), (lat2, lon2)], color="lightgray", weight=1).add_to(m)
 
     folium.Marker([y1, x1], tooltip=reverse_geocode(y1, x1), icon=folium.Icon(color="green")).add_to(m)
     folium.Marker([y2, x2], tooltip=reverse_geocode(y2, x2), icon=folium.Icon(color="red")).add_to(m)
