@@ -72,7 +72,6 @@ def cargar_subgrafo(nodo1, nodo2, radio_m=500):
                     )
     return G
 
-# Streamlit UI
 st.title("🚶‍♂️ Calculador de rutas sobre el grafo por dirección")
 
 geolocator = Nominatim(user_agent="grafo_app")
