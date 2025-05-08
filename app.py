@@ -112,7 +112,18 @@ opciones_destino = buscar_direcciones(query_destino) if query_destino else []
 
 destino_seleccionado = st.selectbox("Elige una dirección de destino", opciones_destino, format_func=lambda x: x[0]) if opciones_destino else None
 # ... (todo lo anterior igual: imports, funciones auxiliares, autocompletado)
+# Inicializar variables en la sesión
+if "grafo" not in st.session_state:
+    st.session_state.grafo = None
+    st.session_state.lat1 = None
+    st.session_state.lat2 = None
+    st.session_state.lon1 = None
+    st.session_state.lon2 = None
+    st.session_state.id1 = None
+    st.session_state.id2 = None
+    st.session_state.error = None
 
+# Cuando se pulsa el botón, se guarda el estado
 if st.button("Calcular ruta") and origen_seleccionado and destino_seleccionado:
     try:
         lat1, lon1 = origen_seleccionado[1], origen_seleccionado[2]
@@ -124,36 +135,51 @@ if st.button("Calcular ruta") and origen_seleccionado and destino_seleccionado:
 
         G, id_coords = cargar_subgrafo(id1, id2)
 
-        # Crear mapa base centrado entre los dos puntos
-        center_lat = (lat1 + lat2) / 2
-        center_lon = (lon1 + lon2) / 2
-        m = folium.Map(location=[center_lat, center_lon], zoom_start=15)
-
-        # Pintar todos los nodos
-        for n in G.nodes():
-            y, x = G.nodes[n]["y"], G.nodes[n]["x"]
-            folium.CircleMarker(location=[y, x], radius=2, color="gray", fill=True, fill_opacity=0.3).add_to(m)
-
-        # Pintar todas las aristas
-        for u, v in G.edges():
-            y1, x1 = G.nodes[u]["y"], G.nodes[u]["x"]
-            y2, x2 = G.nodes[v]["y"], G.nodes[v]["x"]
-            folium.PolyLine(locations=[(y1, x1), (y2, x2)], color="lightgray", weight=1).add_to(m)
-
-        # Pintar origen y destino
-        folium.Marker([lat1, lon1], tooltip="Origen", icon=folium.Icon(color="green")).add_to(m)
-        folium.Marker([lat2, lon2], tooltip="Destino", icon=folium.Icon(color="red")).add_to(m)
-
-        # Intentar ruta
-        try:
-            ruta = nx.shortest_path(G, id1, id2, weight="distancia")
-            coords = [(G.nodes[n]["y"], G.nodes[n]["x"]) for n in ruta]
-            folium.PolyLine(coords, color="blue", weight=4).add_to(m)
-            st.success(f"Ruta de {len(ruta)} nodos encontrada.")
-        except nx.NetworkXNoPath:
-            st.warning("No hay ruta entre los puntos seleccionados, pero se muestra la zona.")
-        
-        st_folium(m, width=700, height=500)
+        st.session_state.grafo = G
+        st.session_state.lat1 = lat1
+        st.session_state.lon1 = lon1
+        st.session_state.lat2 = lat2
+        st.session_state.lon2 = lon2
+        st.session_state.id1 = id1
+        st.session_state.id2 = id2
+        st.session_state.error = None
 
     except Exception as e:
-        st.error(f"Error calculando la ruta: {e}")
+        st.session_state.error = f"Error calculando: {e}"
+
+# Mostrar el mapa si ya hay grafo en la sesión
+if st.session_state.grafo:
+    G = st.session_state.grafo
+    lat1 = st.session_state.lat1
+    lon1 = st.session_state.lon1
+    lat2 = st.session_state.lat2
+    lon2 = st.session_state.lon2
+    id1 = st.session_state.id1
+    id2 = st.session_state.id2
+
+    m = folium.Map(location=[(lat1+lat2)/2, (lon1+lon2)/2], zoom_start=15)
+
+    for n in G.nodes():
+        y, x = G.nodes[n]["y"], G.nodes[n]["x"]
+        folium.CircleMarker(location=[y, x], radius=2, color="gray", fill=True, fill_opacity=0.3).add_to(m)
+
+    for u, v in G.edges():
+        y1, x1 = G.nodes[u]["y"], G.nodes[u]["x"]
+        y2, x2 = G.nodes[v]["y"], G.nodes[v]["x"]
+        folium.PolyLine(locations=[(y1, x1), (y2, x2)], color="lightgray", weight=1).add_to(m)
+
+    folium.Marker([lat1, lon1], tooltip="Origen", icon=folium.Icon(color="green")).add_to(m)
+    folium.Marker([lat2, lon2], tooltip="Destino", icon=folium.Icon(color="red")).add_to(m)
+
+    try:
+        ruta = nx.shortest_path(G, id1, id2, weight="distancia")
+        coords = [(G.nodes[n]["y"], G.nodes[n]["x"]) for n in ruta]
+        folium.PolyLine(coords, color="blue", weight=4).add_to(m)
+        st.success(f"Ruta de {len(ruta)} nodos.")
+    except nx.NetworkXNoPath:
+        st.warning("No hay ruta entre los puntos seleccionados.")
+
+    st_folium(m, width=700, height=500)
+
+elif st.session_state.error:
+    st.error(st.session_state.error)
