@@ -1,48 +1,56 @@
-from flask import Flask, request, jsonify, render_template
-from grafo_loader import cargar_grafo_desde_jsons
+import streamlit as st
 import networkx as nx
+import json
+import os
+import folium
+from streamlit_folium import st_folium
 
-app = Flask(__name__)
+# Cargar grafo completo desde archivos JSON
+@st.cache_resource
+def cargar_grafo():
+    G = nx.DiGraph()
+    for archivo in os.listdir("grafo/nodos"):
+        with open(f"grafo/nodos/{archivo}") as f:
+            nodos = json.load(f)
+            for n in nodos:
+                G.add_node(n["id"], x=n["x"], y=n["y"])
 
-@app.route("/")
-def index():
-    return render_template("index.html")
+    for archivo in os.listdir("grafo/aristas"):
+        with open(f"grafo/aristas/{archivo}") as f:
+            aristas = json.load(f)
+            for a in aristas:
+                G.add_edge(
+                    a["origen"], a["destino"],
+                    distancia=a["distancia"],
+                    tiempo=a["tiempo"],
+                    costo=a["costo_total"],
+                    altura=a["altura_media"]
+                )
+    return G
 
-@app.route("/ruta", methods=["POST"])
-def ruta():
-    data = request.json
-    origen = int(data["origen"])
-    destino = int(data["destino"])
+G = cargar_grafo()
 
+# UI de Streamlit
+st.title("🚶‍♂️ Calculador de rutas sobre el grafo")
+
+nodos = list(G.nodes)
+op_origen = st.selectbox("Selecciona nodo de origen", nodos)
+op_destino = st.selectbox("Selecciona nodo de destino", nodos)
+
+# Calcular y mostrar ruta
+if st.button("Calcular ruta"):
     try:
-        grafo = cargar_grafo_desde_jsons()  # se carga SOLO cuando se pide
-        camino = nx.shortest_path(grafo, origen, destino, weight="distancia")
-        coords = [(grafo.nodes[n]["x"], grafo.nodes[n]["y"]) for n in camino]
-        return jsonify({"ruta": coords})
+        camino = nx.shortest_path(G, op_origen, op_destino, weight="distancia")
+        coords = [(G.nodes[n]["y"], G.nodes[n]["x"]) for n in camino]
+
+        # Crear mapa
+        m = folium.Map(location=coords[0], zoom_start=14)
+        folium.Marker(coords[0], tooltip="Origen", icon=folium.Icon(color="green")).add_to(m)
+        folium.Marker(coords[-1], tooltip="Destino", icon=folium.Icon(color="red")).add_to(m)
+        folium.PolyLine(coords, color="blue", weight=5).add_to(m)
+
+        st.success(f"Ruta calculada con {len(camino)} nodos.")
+        st_folium(m, width=700, height=500)
+
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
-
-
-@app.route("/nodo_mas_cercano", methods=["POST"])
-def nodo_mas_cercano():
-    data = request.json
-    x_click = data["x"]
-    y_click = data["y"]
-
-    # Buscar nodo más cercano por distancia euclídea
-    grafo = cargar_grafo_desde_jsons()  # carga on-demand
-
-    min_dist = float("inf")
-    nodo_mas_cercano = None
-    for nodo, attrs in grafo.nodes(data=True):
-        dx = x_click - attrs["x"]
-        dy = y_click - attrs["y"]
-        dist = dx**2 + dy**2
-        if dist < min_dist:
-            min_dist = dist
-            nodo_mas_cercano = nodo
-
-    return jsonify({"nodo": nodo_mas_cercano})
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+        st.error(f"No se pudo calcular la ruta: {e}")
