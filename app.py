@@ -20,6 +20,29 @@ def ruta():
         coords = [(grafo.nodes[n]["x"], grafo.nodes[n]["y"]) for n in camino]
         return jsonify({"ruta": coords})
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"error": str(e)}), 400ç
+
+
+@app.route("/nodo_mas_cercano", methods=["POST"])
+def nodo_mas_cercano():
+    data = request.json
+    x_click = data["x"]
+    y_click = data["y"]
+
+    # Buscar nodo más cercano por distancia euclídea
+    grafo = cargar_grafo_desde_jsons()  # carga on-demand
+
+    min_dist = float("inf")
+    nodo_mas_cercano = None
+    for nodo, attrs in grafo.nodes(data=True):
+        dx = x_click - attrs["x"]
+        dy = y_click - attrs["y"]
+        dist = dx**2 + dy**2
+        if dist < min_dist:
+            min_dist = dist
+            nodo_mas_cercano = nodo
+
+    return jsonify({"nodo": nodo_mas_cercano})
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
