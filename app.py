@@ -10,16 +10,12 @@ from math import radians, cos, sin, sqrt, atan2
 st.set_page_config(layout="centered")
 st.title("🚶‍♂️ Rutas seguras en Valencia (optimizado)")
 
-# -------------------------------
 # Inicializar session_state
-# -------------------------------
 for key in ["grafo", "origen_coords", "destino_coords", "nodo1", "nodo2", "error", "nodos"]:
     if key not in st.session_state:
         st.session_state[key] = None
 
-# -------------------------------
 # Funciones auxiliares
-# -------------------------------
 @st.cache_data
 def cargar_nodos():
     nodos = []
@@ -92,13 +88,11 @@ def cargar_subgrafo(nodo1, nodo2, radio=500):
                         )
     return G, id_coords
 
-# -------------------------------
-# Interfaz Streamlit
-# -------------------------------
-
+# Cargar nodos
 if st.session_state.nodos is None:
     st.session_state.nodos = cargar_nodos()
 
+# Interfaz de búsqueda y selección
 query1 = st.text_input("📍 Dirección de origen")
 opc1 = buscar_direcciones(query1) if query1 else []
 sel1 = st.selectbox("Selecciona origen", opc1, format_func=lambda x: x[0]) if opc1 else None
@@ -107,7 +101,11 @@ query2 = st.text_input("🎯 Dirección de destino")
 opc2 = buscar_direcciones(query2) if query2 else []
 sel2 = st.selectbox("Selecciona destino", opc2, format_func=lambda x: x[0]) if opc2 else None
 
-if st.button("Calcular ruta") and sel1 and sel2:
+# Cálculo de ruta
+if st.button("Calcular ruta"):
+    if not sel1 or not sel2:
+        st.warning("Selecciona ambas direcciones en los desplegables.")
+        st.stop()
     try:
         lat1, lon1 = sel1[1], sel1[2]
         lat2, lon2 = sel2[1], sel2[2]
@@ -125,11 +123,8 @@ if st.button("Calcular ruta") and sel1 and sel2:
         st.session_state.grafo = None
         st.session_state.error = str(e)
 
-# -------------------------------
-# Visualización persistente
-# -------------------------------
-
-if st.session_state.grafo:
+# Visualización
+if st.session_state.grafo and st.session_state.origen_coords and st.session_state.destino_coords:
     G = st.session_state.grafo
     y1, x1 = st.session_state.origen_coords
     y2, x2 = st.session_state.destino_coords
