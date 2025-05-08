@@ -56,13 +56,20 @@ def buscar_direcciones(query):
     except:
         return []
 
-def cargar_subgrafo(nodo1, nodo2, radio=500):
+def cargar_subgrafo(nodo1, nodo2, base_radio=500):
     nodos_deseados = set()
     todos_nodos = st.session_state.nodos
     id_coords = {n["id"]: (n["y"], n["x"]) for n in todos_nodos}
 
     lat1, lon1 = id_coords[nodo1]
     lat2, lon2 = id_coords[nodo2]
+
+    # Calcular distancia entre origen y destino
+    d = distancia_coords(lat1, lon1, lat2, lon2)
+
+    # Ajustar radio dinámicamente: mitad de la distancia + margen
+    radio = int(d / 2 + 800)
+    st.info(f"🔄 Cargando subgrafo con radio ~{radio} m para conectar los puntos...")
 
     for n in todos_nodos:
         lat, lon = n["y"], n["x"]
