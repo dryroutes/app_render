@@ -20,7 +20,7 @@ def ruta():
         coords = [(grafo.nodes[n]["x"], grafo.nodes[n]["y"]) for n in camino]
         return jsonify({"ruta": coords})
     except Exception as e:
-        return jsonify({"error": str(e)}), 400ç
+        return jsonify({"error": str(e)}), 400
 
 
 @app.route("/nodo_mas_cercano", methods=["POST"])
