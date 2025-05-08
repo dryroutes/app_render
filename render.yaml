@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: rutas-grafo
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app:app
