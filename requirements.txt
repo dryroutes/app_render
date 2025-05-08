@@ -3,3 +3,4 @@ networkx
 pandas
 folium
 streamlit-folium
+geopy
