@@ -10,12 +10,13 @@ from math import radians, cos, sin, sqrt, atan2
 st.set_page_config(layout="centered")
 st.title("🚶‍♂️ Rutas seguras en Valencia (optimizado)")
 
-# Inicializar session_state
+# Inicialización segura del estado
 for key in ["grafo", "origen_coords", "destino_coords", "nodo1", "nodo2", "error", "nodos"]:
     if key not in st.session_state:
         st.session_state[key] = None
 
-# Funciones auxiliares
+# --- FUNCIONES AUXILIARES ---
+
 @st.cache_data
 def cargar_nodos():
     nodos = []
@@ -88,11 +89,11 @@ def cargar_subgrafo(nodo1, nodo2, radio=500):
                         )
     return G, id_coords
 
-# Cargar nodos
+# --- INTERFAZ STREAMLIT ---
+
 if st.session_state.nodos is None:
     st.session_state.nodos = cargar_nodos()
 
-# Interfaz de búsqueda y selección
 query1 = st.text_input("📍 Dirección de origen")
 opc1 = buscar_direcciones(query1) if query1 else []
 sel1 = st.selectbox("Selecciona origen", opc1, format_func=lambda x: x[0]) if opc1 else None
@@ -101,7 +102,6 @@ query2 = st.text_input("🎯 Dirección de destino")
 opc2 = buscar_direcciones(query2) if query2 else []
 sel2 = st.selectbox("Selecciona destino", opc2, format_func=lambda x: x[0]) if opc2 else None
 
-# Cálculo de ruta
 if st.button("Calcular ruta"):
     if not sel1 or not sel2:
         st.warning("Selecciona ambas direcciones en los desplegables.")
@@ -123,7 +123,8 @@ if st.button("Calcular ruta"):
         st.session_state.grafo = None
         st.session_state.error = str(e)
 
-# Visualización
+# --- VISUALIZACIÓN DE MAPA Y RESULTADOS ---
+
 if st.session_state.grafo and st.session_state.origen_coords and st.session_state.destino_coords:
     G = st.session_state.grafo
     y1, x1 = st.session_state.origen_coords
@@ -142,23 +143,38 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
     folium.Marker([y2, x2], tooltip=reverse_geocode(y2, x2), icon=folium.Icon(color="red")).add_to(m)
 
     try:
+        ruta = None
+        modo = "dirigido"
+
         if nx.has_path(G, nodo1, nodo2):
             ruta = nx.shortest_path(G, nodo1, nodo2, weight="distancia")
         elif nx.has_path(G.to_undirected(), nodo1, nodo2):
             ruta = nx.shortest_path(G.to_undirected(), nodo1, nodo2, weight="distancia")
-        else:
-            ruta = None
+            modo = "no dirigido"
 
         if ruta:
             coords = [(G.nodes[n]["y"], G.nodes[n]["x"]) for n in ruta]
             folium.PolyLine(coords, color="blue", weight=4).add_to(m)
-            st.success(f"Ruta encontrada ({len(ruta)} nodos)")
+
+            distancia_total = sum(G[u][v].get("distancia", 0) for u, v in zip(ruta[:-1], ruta[1:]))
+            tiempo_total = sum(G[u][v].get("tiempo", 0) for u, v in zip(ruta[:-1], ruta[1:]))
+            aristas_riesgo = sum(1 for u, v in zip(ruta[:-1], ruta[1:]) if G[u][v].get("altura", 0) > 0)
+            nodos_riesgo = sum(1 for n in ruta if G.nodes[n].get("altura", 0) > 0)
+
+            st.success(f"Ruta encontrada ({len(ruta)} nodos, modo {modo})")
+            st.markdown(f"📏 Distancia total: **{distancia_total:.1f} m**")
+            st.markdown(f"⏱️ Tiempo estimado: **{tiempo_total:.2f} min**")
+            st.markdown(f"⚠️ Aristas con riesgo: **{aristas_riesgo}**")
+            st.markdown(f"⚠️ Nodos con riesgo: **{nodos_riesgo}**")
+
+            if modo == "no dirigido":
+                st.warning("⚠️ Se ha usado modo *no dirigido*. La ruta puede no respetar el sentido real de las calles.")
         else:
             st.warning("No hay ruta posible entre los puntos.")
     except Exception as e:
         st.error(f"Error calculando ruta: {e}")
 
-    st_folium(m, width=700, height=500)
+    st_folium(m, use_container_width=True, height=550)
 
 elif st.session_state.error:
     st.error(st.session_state.error)
