@@ -146,7 +146,6 @@ if st.button("Calcular ruta") and origen_seleccionado and destino_seleccionado:
 
     except Exception as e:
         st.session_state.error = f"Error calculando: {e}"
-
 # Mostrar el mapa si ya hay grafo en la sesión
 if st.session_state.grafo:
     G = st.session_state.grafo
@@ -172,14 +171,26 @@ if st.session_state.grafo:
     folium.Marker([lat2, lon2], tooltip="Destino", icon=folium.Icon(color="red")).add_to(m)
 
     try:
-        ruta = nx.shortest_path(G, id1, id2, weight="distancia")
-        coords = [(G.nodes[n]["y"], G.nodes[n]["x"]) for n in ruta]
-        folium.PolyLine(coords, color="blue", weight=4).add_to(m)
-        st.success(f"Ruta de {len(ruta)} nodos.")
-    except nx.NetworkXNoPath:
-        st.warning("No hay ruta entre los puntos seleccionados.")
+        # Intentar primero como dirigido
+        if nx.has_path(G, id1, id2):
+            ruta = nx.shortest_path(G, id1, id2, weight="distancia")
+            modo = "Ruta dirigida"
+        # Si no, probar como no dirigido
+        elif nx.has_path(G.to_undirected(), id1, id2):
+            ruta = nx.shortest_path(G.to_undirected(), id1, id2, weight="distancia")
+            modo = "Ruta no dirigida"
+        else:
+            ruta = None
+
+        if ruta:
+            coords = [(G.nodes[n]["y"], G.nodes[n]["x"]) for n in ruta]
+            folium.PolyLine(coords, color="blue", weight=4).add_to(m)
+            st.success(f"{modo} encontrada con {len(ruta)} nodos.")
+        else:
+            st.warning("No hay ruta posible ni siquiera en modo no dirigido.")
+    except Exception as e:
+        st.error(f"Error calculando la ruta: {e}")
 
     st_folium(m, width=700, height=500)
-
 elif st.session_state.error:
     st.error(st.session_state.error)
