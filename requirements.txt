@@ -1,3 +1,5 @@
-flask
+streamlit
 networkx
-gunicorn
+pandas
+folium
+streamlit-folium
