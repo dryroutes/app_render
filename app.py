@@ -1,5 +1,25 @@
+import streamlit as st
+import requests
+import networkx as nx
+import json
+import os
+import folium
+from streamlit_folium import st_folium
+from math import radians, cos, sin, sqrt, atan2
+
+# ✅ Después de todos los imports, ya puedes usar st
+st.set_page_config(layout="centered")
+st.title("🚶‍♂️ Rutas seguras en Valencia (optimizado)")
+
+# ✅ Solo aquí puedes ya usar session_state
 if "grafo" not in st.session_state:
     st.session_state.grafo = None
+    st.session_state.origen_coords = None
+    st.session_state.destino_coords = None
+    st.session_state.nodo1 = None
+    st.session_state.nodo2 = None
+    st.session_state.error = None
+
 
 if st.button("Calcular ruta") and sel1 and sel2:
     try:
