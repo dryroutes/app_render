@@ -3,7 +3,6 @@ from grafo_loader import cargar_grafo_desde_jsons
 import networkx as nx
 
 app = Flask(__name__)
-grafo = cargar_grafo_desde_jsons()
 
 @app.route("/")
 def index():
@@ -16,6 +15,7 @@ def ruta():
     destino = int(data["destino"])
 
     try:
+        grafo = cargar_grafo_desde_jsons()  # se carga SOLO cuando se pide
         camino = nx.shortest_path(grafo, origen, destino, weight="distancia")
         coords = [(grafo.nodes[n]["x"], grafo.nodes[n]["y"]) for n in camino]
         return jsonify({"ruta": coords})
