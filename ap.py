@@ -10,9 +10,8 @@ from math import radians, cos, sin, sqrt, atan2
 st.set_page_config(layout="wide")
 st.title("🚶‍♂️ Rutas seguras en Valencia")
 
-# Predicción meteorológica fija
 st.markdown("""
-<div style="background-color:#f0f0f5; padding:10px; border-radius:8px; margin-bottom:20px">
+<div style="background-color:#f0f0f5; padding:10px; border-radius:8px; margin-bottom:20px; color:#222;">
     <strong>📅 Predicción meteorológica para el 8 de mayo de 2025 (Valencia):</strong><br>
     🌥️ <em>Nublado con intervalos soleados</em><br>
     🌡️ Temperatura media: <strong>22 °C</strong><br>
@@ -21,7 +20,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Menú para seleccionar criterio de optimización
 criterio = st.selectbox(
     "🔎 ¿Qué criterio deseas optimizar para la ruta segura?",
     options={
@@ -33,8 +31,8 @@ criterio = st.selectbox(
     format_func=lambda x: {
         "distancia": "Ruta más corta (distancia)",
         "tiempo": "Ruta más rápida (tiempo)",
-        "altura": "Ruta menos expuesta al agua (altura)",
-        "costo_total": "Ruta más económica (coste compuesto)"
+        "altura": "Ruta menos expuesta al agua (altura de inundación)",
+        "costo_total": "Ruta con menor riesgo estimado (riesgo)"
     }[x]
 )
 
