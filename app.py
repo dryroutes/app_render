@@ -1,22 +1,27 @@
 import streamlit as st
+import requests
 import networkx as nx
 import json
 import os
 import folium
-from geopy.geocoders import Nominatim
 from streamlit_folium import st_folium
 from math import radians, cos, sin, sqrt, atan2
 
-# Función auxiliar para calcular distancia entre coordenadas
+st.set_page_config(layout="centered")
+st.title("🚶‍♂️ Calculador de rutas sobre el grafo por dirección (con autocompletado)")
+
+# ----------------------------------------------------
+# FUNCIONES AUXILIARES
+# ----------------------------------------------------
+
 def distancia_coords(lat1, lon1, lat2, lon2):
-    R = 6371000  # radio Tierra en metros
+    R = 6371000
     dlat = radians(lat2 - lat1)
     dlon = radians(lon2 - lon1)
     a = sin(dlat/2)**2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon/2)**2
     c = 2 * atan2(sqrt(a), sqrt(1-a))
     return R * c
 
-# Carga mínima para solo buscar el nodo más cercano
 def cargar_nodos():
     nodos = []
     for archivo in os.listdir("grafo/nodos"):
@@ -24,7 +29,6 @@ def cargar_nodos():
             nodos.extend(json.load(f))
     return nodos
 
-# Buscar nodo más cercano a coordenadas
 def nodo_mas_cercano(lat, lon, nodos):
     min_dist = float("inf")
     nodo_cercano = None
@@ -35,7 +39,6 @@ def nodo_mas_cercano(lat, lon, nodos):
             nodo_cercano = n["id"]
     return nodo_cercano
 
-# Cargar solo subgrafo local
 def cargar_subgrafo(nodo1, nodo2, radio_m=500):
     nodos_deseados = set()
     todos_nodos = []
@@ -70,38 +73,64 @@ def cargar_subgrafo(nodo1, nodo2, radio_m=500):
                         costo=a["costo_total"],
                         altura=a["altura_media"]
                     )
-    return G
+    return G, id_coords
 
-st.title("🚶‍♂️ Calculador de rutas sobre el grafo por dirección")
+# ----------------------------------------------------
+# AUTOCOMPLETADO USANDO PHOTON
+# ----------------------------------------------------
 
-geolocator = Nominatim(user_agent="grafo_app")
-direccion1 = st.text_input("Dirección de origen", placeholder="Calle X, Valencia")
-direccion2 = st.text_input("Dirección de destino", placeholder="Calle Y, Valencia")
-
-if st.button("Calcular ruta"):
+def buscar_direcciones(query):
     try:
-        location1 = geolocator.geocode(direccion1 + ", Valencia, España")
-        location2 = geolocator.geocode(direccion2 + ", Valencia, España")
+        url = f"https://photon.komoot.io/api/?q={query}, Valencia, España&limit=5"
+        r = requests.get(url, timeout=4)
+        resultados = r.json()["features"]
+        opciones = []
+        for res in resultados:
+            nombre = res["properties"].get("name", "")
+            calle = res["properties"].get("street", "")
+            ciudad = res["properties"].get("city", "")
+            label = f"{nombre or calle}, {ciudad}".strip(", ")
+            coords = res["geometry"]["coordinates"]
+            opciones.append((label, coords[1], coords[0]))  # (nombre, lat, lon)
+        return opciones
+    except Exception as e:
+        return []
 
-        if not location1 or not location2:
-            st.error("No se pudieron encontrar las direcciones.")
-        else:
-            nodos = cargar_nodos()
-            nodo1 = nodo_mas_cercano(location1.latitude, location1.longitude, nodos)
-            nodo2 = nodo_mas_cercano(location2.latitude, location2.longitude, nodos)
+# ----------------------------------------------------
+# UI DE STREAMLIT
+# ----------------------------------------------------
 
-            G = cargar_subgrafo(nodo1, nodo2)
+st.subheader("Dirección de origen:")
+query_origen = st.text_input("Buscar origen", key="origen_input")
+opciones_origen = buscar_direcciones(query_origen) if query_origen else []
 
-            camino = nx.shortest_path(G, nodo1, nodo2, weight="distancia")
-            coords = [(G.nodes[n]["y"], G.nodes[n]["x"]) for n in camino]
+origen_seleccionado = st.selectbox("Elige una dirección de origen", opciones_origen, format_func=lambda x: x[0]) if opciones_origen else None
 
-            m = folium.Map(location=coords[0], zoom_start=15)
-            folium.Marker(coords[0], tooltip="Origen", icon=folium.Icon(color="green")).add_to(m)
-            folium.Marker(coords[-1], tooltip="Destino", icon=folium.Icon(color="red")).add_to(m)
-            folium.PolyLine(coords, color="blue", weight=4).add_to(m)
+st.subheader("Dirección de destino:")
+query_destino = st.text_input("Buscar destino", key="destino_input")
+opciones_destino = buscar_direcciones(query_destino) if query_destino else []
 
-            st.success(f"Ruta de {len(camino)} nodos encontrada.")
-            st_folium(m, width=700, height=500)
+destino_seleccionado = st.selectbox("Elige una dirección de destino", opciones_destino, format_func=lambda x: x[0]) if opciones_destino else None
 
+if st.button("Calcular ruta") and origen_seleccionado and destino_seleccionado:
+    try:
+        lat1, lon1 = origen_seleccionado[1], origen_seleccionado[2]
+        lat2, lon2 = destino_seleccionado[1], destino_seleccionado[2]
+
+        nodos = cargar_nodos()
+        id1 = nodo_mas_cercano(lat1, lon1, nodos)
+        id2 = nodo_mas_cercano(lat2, lon2, nodos)
+
+        G, id_coords = cargar_subgrafo(id1, id2)
+
+        ruta = nx.shortest_path(G, id1, id2, weight="distancia")
+        coords = [(G.nodes[n]["y"], G.nodes[n]["x"]) for n in ruta]
+
+        m = folium.Map(location=[lat1, lon1], zoom_start=15)
+        folium.Marker(coords[0], tooltip="Origen", icon=folium.Icon(color="green")).add_to(m)
+        folium.Marker(coords[-1], tooltip="Destino", icon=folium.Icon(color="red")).add_to(m)
+        folium.PolyLine(coords, color="blue", weight=4).add_to(m)
+        st.success(f"Ruta de {len(ruta)} nodos encontrada.")
+        st_folium(m, width=700, height=500)
     except Exception as e:
         st.error(f"Error calculando la ruta: {e}")
