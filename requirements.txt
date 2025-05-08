@@ -1,6 +1,5 @@
 streamlit
-networkx
-pandas
-folium
 streamlit-folium
-geopy
+folium
+networkx
+requests
