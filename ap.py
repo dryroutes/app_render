@@ -8,8 +8,9 @@ from streamlit_folium import st_folium
 from math import radians, cos, sin, sqrt, atan2
 
 st.set_page_config(layout="wide")
-st.title("🚶‍♂️ Rutas seguras en Valencia (visual optimizado)")
+st.title("🚶‍♂️ Rutas seguras en Valencia")
 
+# Predicción meteorológica fija
 st.markdown("""
 <div style="background-color:#f0f0f5; padding:10px; border-radius:8px; margin-bottom:20px">
     <strong>📅 Predicción meteorológica para el 8 de mayo de 2025 (Valencia):</strong><br>
@@ -20,8 +21,24 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# Menú para seleccionar criterio de optimización
+criterio = st.selectbox(
+    "🔎 ¿Qué criterio deseas optimizar para la ruta segura?",
+    options={
+        "distancia": "Ruta más corta (distancia)",
+        "tiempo": "Ruta más rápida (tiempo)",
+        "altura": "Ruta menos expuesta al agua (altura)",
+        "costo_total": "Ruta más económica (coste compuesto)"
+    },
+    format_func=lambda x: {
+        "distancia": "Ruta más corta (distancia)",
+        "tiempo": "Ruta más rápida (tiempo)",
+        "altura": "Ruta menos expuesta al agua (altura)",
+        "costo_total": "Ruta más económica (coste compuesto)"
+    }[x]
+)
 
-# Inicialización segura del estado
+# Inicialización de estado
 for key in ["grafo", "origen_coords", "destino_coords", "nodo1", "nodo2", "error", "nodos"]:
     if key not in st.session_state:
         st.session_state[key] = None
@@ -65,7 +82,7 @@ def buscar_direcciones(query):
     except:
         return []
 
-def cargar_subgrafo(nodo1, nodo2, base_radio=500):
+def cargar_subgrafo(nodo1, nodo2):
     nodos_deseados = set()
     todos_nodos = st.session_state.nodos
     id_coords = {n["id"]: (n["y"], n["x"]) for n in todos_nodos}
@@ -101,11 +118,9 @@ def cargar_subgrafo(nodo1, nodo2, base_radio=500):
                         )
     return G, id_coords
 
-# --- Cargar nodos ---
 if st.session_state.nodos is None:
     st.session_state.nodos = cargar_nodos()
 
-# --- Layout en columnas ---
 col1, col2 = st.columns([1, 2])
 
 with col1:
@@ -138,7 +153,6 @@ with col1:
             st.session_state.grafo = None
             st.session_state.error = str(e)
 
-# --- Mostrar resultados y mapa ---
 if st.session_state.grafo and st.session_state.origen_coords and st.session_state.destino_coords:
     G = st.session_state.grafo
     y1, x1 = st.session_state.origen_coords
@@ -156,9 +170,9 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
         modo = "dirigido"
 
         if nx.has_path(G, nodo1, nodo2):
-            ruta = nx.shortest_path(G, nodo1, nodo2, weight="distancia")
+            ruta = nx.shortest_path(G, nodo1, nodo2, weight=criterio)
         elif nx.has_path(G.to_undirected(), nodo1, nodo2):
-            ruta = nx.shortest_path(G.to_undirected(), nodo1, nodo2, weight="distancia")
+            ruta = nx.shortest_path(G.to_undirected(), nodo1, nodo2, weight=criterio)
             modo = "no dirigido"
 
         if ruta:
@@ -172,6 +186,7 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
 
             with col1:
                 st.success(f"Ruta encontrada ({len(ruta)} nodos, modo {modo})")
+                st.markdown(f"🧮 Criterio optimizado: **{criterio}**")
                 st.markdown(f"📏 Distancia total: **{distancia_total:.1f} m**")
                 st.markdown(f"⏱️ Tiempo estimado: **{tiempo_total:.0f} segundos**")
                 st.markdown(f"⚠️ Aristas con riesgo: **{aristas_riesgo}**")
