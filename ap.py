@@ -10,6 +10,17 @@ from math import radians, cos, sin, sqrt, atan2
 st.set_page_config(layout="wide")
 st.title("🚶‍♂️ Rutas seguras en Valencia (visual optimizado)")
 
+st.markdown("""
+<div style="background-color:#f0f0f5; padding:10px; border-radius:8px; margin-bottom:20px">
+    <strong>📅 Predicción meteorológica para el 8 de mayo de 2025 (Valencia):</strong><br>
+    🌥️ <em>Nublado con intervalos soleados</em><br>
+    🌡️ Temperatura media: <strong>22 °C</strong><br>
+    💨 Viento moderado del este: <strong>20 km/h</strong><br>
+    🌧️ Probabilidad de precipitación: <strong>10%</strong>
+</div>
+""", unsafe_allow_html=True)
+
+
 # Inicialización segura del estado
 for key in ["grafo", "origen_coords", "destino_coords", "nodo1", "nodo2", "error", "nodos"]:
     if key not in st.session_state:
