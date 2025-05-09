@@ -169,6 +169,8 @@ with col1:
             penalizar_riesgo(G, emergencia, incidencias)
 
             st.session_state.grafo = G
+            st.session_state.parkings = parkings
+
             st.session_state.origen_coords = (G.nodes[nodo1]["y"], G.nodes[nodo1]["x"])
             st.session_state.destino_coords = (G.nodes[nodo2]["y"], G.nodes[nodo2]["x"])
             st.session_state.nodo1 = nodo1
@@ -221,7 +223,8 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
                 if modo == "no dirigido":
                     st.warning("⚠️ Se ha usado modo *no dirigido*. La ruta puede no respetar el sentido real de las calles.")
 
-                p = parking_cercano(y2, x2, parkings)
+                    p = parking_cercano(y2, x2, st.session_state.parkings)
+    
                 if p["is_underground"] == 1:
                     if any(G[u][v].get("altura", 0) > 0 for u, v in zip(ruta[:-1], ruta[1:])):
                         st.warning("🚨 El parking más cercano es subterráneo y hay riesgo de inundación.")
