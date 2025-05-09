@@ -12,10 +12,10 @@ st.title("🚶‍♂️ Rutas seguras en Valencia")
 
 st.markdown("""
 <div style="background-color:#f0f0f5; padding:10px; border-radius:8px; margin-bottom:20px; color:#222;">
-    <strong>🗕️ Predicción meteorológica para el 8 de mayo de 2025 (Valencia):</strong><br>
-    ☁️ <em>Nublado con intervalos soleados</em><br>
+    <strong>📅 Predicción meteorológica para el 8 de mayo de 2025 (Valencia):</strong><br>
+    🌥️ <em>Nublado con intervalos soleados</em><br>
     🌡️ Temperatura media: <strong>22 °C</strong><br>
-    🌬️ Viento moderado del este: <strong>20 km/h</strong><br>
+    💨 Viento moderado del este: <strong>20 km/h</strong><br>
     🌧️ Probabilidad de precipitación: <strong>10%</strong>
 </div>
 """, unsafe_allow_html=True)
@@ -139,3 +139,103 @@ def penalizar_riesgo(G, emergencia, incidencias):
 
 def parking_cercano(y_dest, x_dest, parkings):
     return min(parkings, key=lambda p: distancia_coords(y_dest, x_dest, p["lat"], p["lon"]))
+
+if st.session_state.nodos is None:
+    st.session_state.nodos = cargar_nodos()
+
+col1, col2 = st.columns([1, 2])
+
+with col1:
+    query1 = st.text_input("📍 Dirección de origen")
+    opc1 = buscar_direcciones(query1) if query1 else []
+    sel1 = st.selectbox("Selecciona origen", opc1, format_func=lambda x: x[0]) if opc1 else None
+
+    query2 = st.text_input("🎯 Dirección de destino")
+    opc2 = buscar_direcciones(query2) if query2 else []
+    sel2 = st.selectbox("Selecciona destino", opc2, format_func=lambda x: x[0]) if opc2 else None
+
+    if st.button("Calcular ruta"):
+        if not sel1 or not sel2:
+            st.warning("Selecciona ambas direcciones en los desplegables.")
+            st.stop()
+        try:
+            lat1, lon1 = sel1[1], sel1[2]
+            lat2, lon2 = sel2[1], sel2[2]
+            nodo1 = nodo_mas_cercano(lat1, lon1, st.session_state.nodos)
+            nodo2 = nodo_mas_cercano(lat2, lon2, st.session_state.nodos)
+            G, id_coords = cargar_subgrafo(nodo1, nodo2)
+
+            emergencia, incidencias, parkings = cargar_recursos()
+            penalizar_riesgo(G, emergencia, incidencias)
+
+            st.session_state.grafo = G
+            st.session_state.origen_coords = (G.nodes[nodo1]["y"], G.nodes[nodo1]["x"])
+            st.session_state.destino_coords = (G.nodes[nodo2]["y"], G.nodes[nodo2]["x"])
+            st.session_state.nodo1 = nodo1
+            st.session_state.nodo2 = nodo2
+            st.session_state.error = None
+
+        except Exception as e:
+            st.session_state.grafo = None
+            st.session_state.error = str(e)
+
+if st.session_state.grafo and st.session_state.origen_coords and st.session_state.destino_coords:
+    G = st.session_state.grafo
+    y1, x1 = st.session_state.origen_coords
+    y2, x2 = st.session_state.destino_coords
+    nodo1 = st.session_state.nodo1
+    nodo2 = st.session_state.nodo2
+
+    m = folium.Map(location=[(y1 + y2)/2, (x1 + x2)/2], zoom_start=14)
+
+    folium.Marker([y1, x1], tooltip=reverse_geocode(y1, x1), icon=folium.Icon(color="green")).add_to(m)
+    folium.Marker([y2, x2], tooltip=reverse_geocode(y2, x2), icon=folium.Icon(color="red")).add_to(m)
+
+    try:
+        ruta = None
+        modo = "dirigido"
+
+        if nx.has_path(G, nodo1, nodo2):
+            ruta = nx.shortest_path(G, nodo1, nodo2, weight=criterio)
+        elif nx.has_path(G.to_undirected(), nodo1, nodo2):
+            ruta = nx.shortest_path(G.to_undirected(), nodo1, nodo2, weight=criterio)
+            modo = "no dirigido"
+
+        if ruta:
+            coords = [(G.nodes[n]["y"], G.nodes[n]["x"]) for n in ruta]
+            folium.PolyLine(coords, color="blue", weight=4).add_to(m)
+
+            distancia_total = sum(G[u][v].get("distancia", 0) for u, v in zip(ruta[:-1], ruta[1:]))
+            tiempo_total = sum(G[u][v].get("tiempo", 0) for u, v in zip(ruta[:-1], ruta[1:])) * 60
+            aristas_riesgo = sum(1 for u, v in zip(ruta[:-1], ruta[1:]) if G[u][v].get("altura", 0) > 0)
+            nodos_riesgo = sum(1 for n in ruta if G.nodes[n].get("altura", 0) > 0)
+
+            with col1:
+                st.success(f"Ruta encontrada ({len(ruta)} nodos, modo {modo})")
+                st.markdown(f"🧮 Criterio optimizado: **{criterio}**")
+                st.markdown(f"📏 Distancia total: **{distancia_total:.1f} m**")
+                st.markdown(f"⏱️ Tiempo estimado: **{tiempo_total:.0f} segundos**")
+                st.markdown(f"⚠️ Aristas con riesgo: **{aristas_riesgo}**")
+                st.markdown(f"⚠️ Nodos con riesgo: **{nodos_riesgo}**")
+
+                if modo == "no dirigido":
+                    st.warning("⚠️ Se ha usado modo *no dirigido*. La ruta puede no respetar el sentido real de las calles.")
+
+                p = parking_cercano(y2, x2, parkings)
+                if p["is_underground"] == 1:
+                    if any(G[u][v].get("altura", 0) > 0 for u, v in zip(ruta[:-1], ruta[1:])):
+                        st.warning("🚨 El parking más cercano es subterráneo y hay riesgo de inundación.")
+                    else:
+                        st.info("ℹ️ El parking más cercano es subterráneo.")
+                else:
+                    st.success("🅿️ El parking más cercano es en superficie.")
+
+    except Exception as e:
+        with col1:
+            st.error(f"Error calculando ruta: {e}")
+
+    with col2:
+        st_folium(m, use_container_width=True, height=600)
+
+elif st.session_state.error:
+    st.error(st.session_state.error)
