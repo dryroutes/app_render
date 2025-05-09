@@ -1,0 +1,282 @@
+[
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.5257461,
+    "lat": 39.442062,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T16:21:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -1.3467382,
+    "lat": 39.537575,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T16:40:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.3896763,
+    "lat": 39.397003,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T16:16:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.6891878,
+    "lat": 39.471107,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T17:17:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.4267406,
+    "lat": 39.436058,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T17:47:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.6129765,
+    "lat": 39.33747,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T07:07:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.416125,
+    "lat": 39.375008,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T17:52:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.2873558,
+    "lat": 39.66836,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T16:03:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.3007502,
+    "lat": 39.629635,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T17:27:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.2897092,
+    "lat": 39.064682,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T18:47:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.285676,
+    "lat": 39.69092,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T18:19:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.2634533,
+    "lat": 39.24969,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T18:20:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.8126703,
+    "lat": 39.70097,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T17:49:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.449201,
+    "lat": 39.53605,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T12:35:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.822182,
+    "lat": 39.43718,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T18:03:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -1.5095617,
+    "lat": 39.548843,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T17:54:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.42361,
+    "lat": 39.4729,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T18:47:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -1.1028122,
+    "lat": 39.483658,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T18:21:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.5142777,
+    "lat": 39.572647,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T15:10:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.6129765,
+    "lat": 39.33747,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T07:07:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.4620132,
+    "lat": 39.258698,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T18:27:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.2972331,
+    "lat": 39.67339,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T16:39:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.402444,
+    "lat": 39.30481,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T17:11:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.93429,
+    "lat": 39.70519,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T17:49:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.3243339,
+    "lat": 38.898453,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T16:44:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.5196334,
+    "lat": 39.57545,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T15:00:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.5492122,
+    "lat": 39.47299,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T17:04:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.79788,
+    "lat": 39.429585,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T18:49:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.56288,
+    "lat": 39.4729,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T18:11:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.3736727,
+    "lat": 39.42078,
+    "nivel": "NO APLICA",
+    "_date": "2025-05-09T18:31:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.4073996,
+    "lat": 39.450695,
+    "nivel": "AMARILLO",
+    "_date": "2025-05-09T18:32:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.3688844,
+    "lat": 39.444992,
+    "nivel": "AMARILLO",
+    "_date": "2025-05-09T12:27:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.4193238,
+    "lat": 39.46705,
+    "nivel": "AMARILLO",
+    "_date": "2025-05-09T18:10:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.5849753,
+    "lat": 39.47401,
+    "nivel": "AMARILLO",
+    "_date": "2025-05-09T18:11:00"
+  },
+  {
+    "tipo": "Incidencia",
+    "estado": 1,
+    "lng": -0.4172188,
+    "lat": 39.447258,
+    "nivel": "AMARILLO",
+    "_date": "2025-05-09T17:21:00"
+  }
+]

@@ -1,0 +1,1682 @@
+[
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.4735801,
+    "longitud": -0.3637945
+  },
+  {
+    "tipo": "police",
+    "nombre": "Comisaría de Policía Nacional del distrito de Abastos",
+    "latitud": 39.468185,
+    "longitud": -0.3879556
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Universitario La Fe",
+    "latitud": 39.4837878,
+    "longitud": -0.3904493
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Nacional de Torrent",
+    "latitud": 39.4302212,
+    "longitud": -0.4791593
+  },
+  {
+    "tipo": "police",
+    "nombre": "Comisaría Central Policia Local de Paterna",
+    "latitud": 39.5122494,
+    "longitud": -0.4547841
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 39.0332819,
+    "longitud": -0.2157698
+  },
+  {
+    "tipo": "police",
+    "nombre": "Oficina del NIF",
+    "latitud": 39.4708294,
+    "longitud": -0.3832932
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local",
+    "latitud": 39.4649421,
+    "longitud": -0.4618883
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local",
+    "latitud": 39.5459333,
+    "longitud": -0.5767488
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local De La Pobla Vallbona",
+    "latitud": 39.5911093,
+    "longitud": -0.5533313
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil",
+    "latitud": 39.5042249,
+    "longitud": -0.3639149
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.490063,
+    "longitud": -0.372961
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia local (platja)",
+    "latitud": 39.0885431,
+    "longitud": -0.2164288
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia local de Tavernes de la Valldigna",
+    "latitud": 39.0691047,
+    "longitud": -0.2722281
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local",
+    "latitud": 39.5670848,
+    "longitud": -0.6219662
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil",
+    "latitud": 39.5700456,
+    "longitud": -0.6267406
+  },
+  {
+    "tipo": "police",
+    "nombre": "Puesto de Riba-roja (Cuartel de la Guardia Civil)",
+    "latitud": 39.5420469,
+    "longitud": -0.5729685
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local",
+    "latitud": 39.565797,
+    "longitud": -0.5299743
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Nacional",
+    "latitud": 39.4824442,
+    "longitud": -0.4504512
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.5579397,
+    "longitud": -0.3258757
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local Anna",
+    "latitud": 39.0207714,
+    "longitud": -0.6472741
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Nacional. Brigada Provincial de Seguretat Ciutadana",
+    "latitud": 39.4564876,
+    "longitud": -0.3677367
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.5395286,
+    "longitud": -0.5452426
+  },
+  {
+    "tipo": "police",
+    "nombre": "Central Policia Local Mislata",
+    "latitud": 39.4786708,
+    "longitud": -0.4154277
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 39.5890166,
+    "longitud": -0.3344077
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 39.657149,
+    "longitud": -0.4240442
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": NaN,
+    "latitud": 39.4670812,
+    "longitud": -0.4037856
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local de Massanassa",
+    "latitud": 39.4113598,
+    "longitud": -0.3982186
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 39.3524743,
+    "longitud": -0.6029565
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Metge",
+    "latitud": 38.7815553,
+    "longitud": -0.7842386
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 39.1959716,
+    "longitud": -0.3696762
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil",
+    "latitud": 39.3933692,
+    "longitud": -0.4121128
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Municipal",
+    "latitud": 39.3936677,
+    "longitud": -0.4118446
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 38.8071619,
+    "longitud": -0.8807003
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local de Alzira",
+    "latitud": 39.1490793,
+    "longitud": -0.4405333
+  },
+  {
+    "tipo": "police",
+    "nombre": "Cuartel de la Guardia Civil",
+    "latitud": 39.2214365,
+    "longitud": -0.5172661
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.520204,
+    "longitud": -1.1521106
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia",
+    "latitud": 39.5420173,
+    "longitud": -0.3923909
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": NaN,
+    "latitud": 39.4574562,
+    "longitud": -0.4511771
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guàrdia Civil",
+    "latitud": 39.6141891,
+    "longitud": -0.2972051
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parque de Bomberos El Saler",
+    "latitud": 39.3607498,
+    "longitud": -0.3276972
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 38.9436096,
+    "longitud": -0.4439989
+  },
+  {
+    "tipo": "police",
+    "nombre": "Central de emergencias",
+    "latitud": 39.4994996,
+    "longitud": -0.3451006
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local de Silla",
+    "latitud": 39.3640073,
+    "longitud": -0.4172474
+  },
+  {
+    "tipo": "police",
+    "nombre": "Cuartel de la Guarcia Civil",
+    "latitud": 39.7337223,
+    "longitud": -1.2300123
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 38.9707961,
+    "longitud": -0.5891361
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.5616099,
+    "longitud": -0.5003594
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.5281554,
+    "longitud": -0.4885988
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local",
+    "latitud": 39.4674296,
+    "longitud": -0.4276794
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Nacional",
+    "latitud": 39.4647584,
+    "longitud": -0.437381
+  },
+  {
+    "tipo": "police",
+    "nombre": "Comisaría de Distrito Valencia Marítimo",
+    "latitud": 39.4661335,
+    "longitud": -0.3271186
+  },
+  {
+    "tipo": "ambulance_station",
+    "nombre": NaN,
+    "latitud": 39.3797114,
+    "longitud": -0.3240723
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local",
+    "latitud": 39.5643195,
+    "longitud": -0.3414563
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local de Godelleta",
+    "latitud": 39.4247681,
+    "longitud": -0.6856076
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Retén de Bomberos del Saler",
+    "latitud": 39.3909066,
+    "longitud": -0.3302924
+  },
+  {
+    "tipo": "police",
+    "nombre": "Comisaría Policía Nacional",
+    "latitud": 39.47149,
+    "longitud": -0.4125713
+  },
+  {
+    "tipo": "ambulance_station",
+    "nombre": "Creu Roja de la Pobla de Vallbona",
+    "latitud": 39.595691,
+    "longitud": -0.5569386
+  },
+  {
+    "tipo": "police",
+    "nombre": "Puesto Auxiliar de Simat de Valldigna",
+    "latitud": 39.0459808,
+    "longitud": -0.3148612
+  },
+  {
+    "tipo": "police",
+    "nombre": "Cuartel de la Guardia Civil",
+    "latitud": 39.5955278,
+    "longitud": -0.5566023
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Clinica Dental Nord",
+    "latitud": 39.4651856,
+    "longitud": -0.350731
+  },
+  {
+    "tipo": "police",
+    "nombre": "Dirección General de la Policía Abastos",
+    "latitud": 39.4705629,
+    "longitud": -0.3854992
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 38.8795497,
+    "longitud": -0.752245
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Malva-rosa",
+    "latitud": 39.4752239,
+    "longitud": -0.3253542
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local Benaguasil",
+    "latitud": 39.5939672,
+    "longitud": -0.5834235
+  },
+  {
+    "tipo": "police",
+    "nombre": "Agencia Tributaria",
+    "latitud": 39.4914754,
+    "longitud": -0.4732544
+  },
+  {
+    "tipo": "police",
+    "nombre": "Control Pasaportes",
+    "latitud": 39.4908586,
+    "longitud": -0.4720768
+  },
+  {
+    "tipo": "police",
+    "nombre": "Cuerpo Nacional de Policía",
+    "latitud": 39.4915737,
+    "longitud": -0.4739638
+  },
+  {
+    "tipo": "ambulance_station",
+    "nombre": "SAMUR",
+    "latitud": 39.3533751,
+    "longitud": -0.4108939
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.2953908,
+    "longitud": -0.411191
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil",
+    "latitud": 39.4912248,
+    "longitud": -0.6854605
+  },
+  {
+    "tipo": "police",
+    "nombre": "Jefatura Superior de Policía Nacional de la Comunidad Valenciana",
+    "latitud": 39.4693295,
+    "longitud": -0.3839163
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.7503131,
+    "longitud": -0.9954062
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 38.9486973,
+    "longitud": -0.1926507
+  },
+  {
+    "tipo": "ambulance_station",
+    "nombre": "Creu Roja",
+    "latitud": 38.8313578,
+    "longitud": -0.5723166
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil Lliria",
+    "latitud": 39.6374674,
+    "longitud": -0.5879803
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local Buñol",
+    "latitud": 39.4188859,
+    "longitud": -0.7891063
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local",
+    "latitud": 39.489608,
+    "longitud": -0.571803
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Unidad Basica de Salud",
+    "latitud": 39.4261832,
+    "longitud": -0.7850464
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Protecció Civil Torrent",
+    "latitud": 39.4377792,
+    "longitud": -0.4948661
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Centro de Especialidades El Grao",
+    "latitud": 39.460095,
+    "longitud": -0.335667
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.0507801,
+    "longitud": -0.4553008
+  },
+  {
+    "tipo": "police",
+    "nombre": "Cuartel Guardia Civil",
+    "latitud": 39.4745285,
+    "longitud": -0.7105228
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local Paterna",
+    "latitud": 39.5310411,
+    "longitud": -0.4737084
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 39.4584793,
+    "longitud": -0.7309741
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Doctor Moliner",
+    "latitud": 39.6562061,
+    "longitud": -0.4742476
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Centro Salud Polinyà de Xúquer",
+    "latitud": 39.1984292,
+    "longitud": -0.3668908
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 39.6780905,
+    "longitud": -0.2214364
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 38.9699699,
+    "longitud": -0.1537745
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local",
+    "latitud": 39.278193,
+    "longitud": -0.3814552
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local",
+    "latitud": 39.4002084,
+    "longitud": -0.4019065
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 38.9501895,
+    "longitud": -0.6529922
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.1191096,
+    "longitud": -0.7406618
+  },
+  {
+    "tipo": "police",
+    "nombre": "Ploicia Local",
+    "latitud": 38.8843909,
+    "longitud": -0.2083469
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 39.5387515,
+    "longitud": -0.3703619
+  },
+  {
+    "tipo": "police",
+    "nombre": "Polícia Local de Meliana",
+    "latitud": 39.5262197,
+    "longitud": -0.3487062
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 39.5441793,
+    "longitud": -0.3855632
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Cruz Roja",
+    "latitud": 39.1466852,
+    "longitud": -0.4398372
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local de Sumacarcer",
+    "latitud": 39.0945149,
+    "longitud": -0.6289751
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 38.9641836,
+    "longitud": -0.132434
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local",
+    "latitud": 38.9588636,
+    "longitud": -0.1250612
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Asisa",
+    "latitud": 39.4712282,
+    "longitud": -0.3740804
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local",
+    "latitud": 39.5323791,
+    "longitud": -0.4098112
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local de Sagunt",
+    "latitud": 39.6602137,
+    "longitud": -0.2179214
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Nacional",
+    "latitud": 39.510892,
+    "longitud": -0.4108853
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Municipal de Burjassot",
+    "latitud": 39.509591,
+    "longitud": -0.4107218
+  },
+  {
+    "tipo": "police",
+    "nombre": "Prefectura de Policía Local de Puçol",
+    "latitud": 39.6243639,
+    "longitud": -0.3046135
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local de Picanya",
+    "latitud": 39.4353371,
+    "longitud": -0.433044
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital IMED Colón",
+    "latitud": 39.4687393,
+    "longitud": -0.3706641
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local de Benifaió",
+    "latitud": 39.2869478,
+    "longitud": -0.4256968
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local de Bocairent",
+    "latitud": 38.7674971,
+    "longitud": -0.6098271
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia National",
+    "latitud": 39.4654709,
+    "longitud": -0.3338668
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 38.8233541,
+    "longitud": -0.5473656
+  },
+  {
+    "tipo": "police",
+    "nombre": "Casa Cuartel de la Guardia Civil",
+    "latitud": 39.2567937,
+    "longitud": -0.4727595
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil de Alfafar",
+    "latitud": 39.4181335,
+    "longitud": -0.3921556
+  },
+  {
+    "tipo": "police",
+    "nombre": "Prefectura Policia Local",
+    "latitud": 38.8785548,
+    "longitud": -0.5883983
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local de Alfafar",
+    "latitud": 39.420885,
+    "longitud": -0.3866542
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.6962418,
+    "longitud": -0.2005758
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local de Canet d'en Berenguer",
+    "latitud": 39.6807748,
+    "longitud": -0.2034857
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local de Gilet",
+    "latitud": 39.6790333,
+    "longitud": -0.3216709
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers d'Ontinyent",
+    "latitud": 38.8312873290601,
+    "longitud": -0.5727978875937783
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Clínic Universitari",
+    "latitud": 39.47898327649585,
+    "longitud": -0.3616725621871744
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guàrdia Civil",
+    "latitud": 39.482192872887026,
+    "longitud": -0.3595208829134808
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Pare Jofré",
+    "latitud": 39.453234137198145,
+    "longitud": -0.39488973903411617
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Nacional",
+    "latitud": 38.98929971740581,
+    "longitud": -0.5173412458650831
+  },
+  {
+    "tipo": "hospital",
+    "nombre": NaN,
+    "latitud": 39.48842238026224,
+    "longitud": -1.089311868964271
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 39.490261367635604,
+    "longitud": -1.1075274024262307
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil d´Alzira",
+    "latitud": 39.15343027524407,
+    "longitud": -0.4457814578558499
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Instituto Valenciano de Oncología",
+    "latitud": 39.48196721972804,
+    "longitud": -0.3905535365010933
+  },
+  {
+    "tipo": "ambulance_station",
+    "nombre": "Cruz Roja Española",
+    "latitud": 39.481087715053114,
+    "longitud": -0.38048403003958997
+  },
+  {
+    "tipo": "police",
+    "nombre": "Cuartel de la Guardia Civil",
+    "latitud": 39.467998569485154,
+    "longitud": -0.4640620968713417
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers Zona Nord \"Vicente Sivera\"",
+    "latitud": 39.48174299247154,
+    "longitud": -0.3539115046204355
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Quirón Salud Valencia",
+    "latitud": 39.47802849819065,
+    "longitud": -0.36416197284488055
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc Central de Bombers",
+    "latitud": 39.453968441205596,
+    "longitud": -0.3673731611313799
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital de Manises",
+    "latitud": 39.485565476587745,
+    "longitud": -0.45264158124014603
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital General",
+    "latitud": 39.488426282378825,
+    "longitud": -1.0893185234147174
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Vithas Valencia 9 de Octubre",
+    "latitud": 39.47794855055926,
+    "longitud": -0.4014463358212613
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Universitari i Politècnic La Fe",
+    "latitud": 39.44350181857874,
+    "longitud": -0.376093784530457
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital General Universitari",
+    "latitud": 39.46840838526797,
+    "longitud": -0.40840270316848115
+  },
+  {
+    "tipo": "police",
+    "nombre": "Comissaria de Policia de Paterna",
+    "latitud": 39.510320217986184,
+    "longitud": -0.45161146248387013
+  },
+  {
+    "tipo": "police",
+    "nombre": "Casa Cuartel de la Guardia Civil",
+    "latitud": 39.20240045613411,
+    "longitud": -0.3177809947417926
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Arnau de Vilanova",
+    "latitud": 39.49070263608281,
+    "longitud": -0.4035263158729402
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Vithas Nisa Valencia al Mar",
+    "latitud": 39.477118759105814,
+    "longitud": -0.3306971510959342
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Universitari Doctor Peset",
+    "latitud": 39.45308241624544,
+    "longitud": -0.39444154474360477
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil del Mar",
+    "latitud": 39.425646615873454,
+    "longitud": -0.32430631531150317
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil",
+    "latitud": 39.544667260420375,
+    "longitud": -0.3976739991005978
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia local",
+    "latitud": 39.0476600023338,
+    "longitud": -0.1949947601832312
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers de Montcada",
+    "latitud": 39.56970458574106,
+    "longitud": -0.40257373698511795
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local Districte de Patraix",
+    "latitud": 39.453665971518994,
+    "longitud": -0.40261421780055406
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia de la Generalitat",
+    "latitud": 39.48112774505701,
+    "longitud": -0.3735941357707251
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil",
+    "latitud": 38.92460132796354,
+    "longitud": -0.1254684717467073
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Casa de la Salud",
+    "latitud": 39.46978737160165,
+    "longitud": -0.35056649960082353
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Instituto Social de la Marina - Casa del Mar",
+    "latitud": 39.460713259675224,
+    "longitud": -0.336429547726957
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local",
+    "latitud": 39.4930618297151,
+    "longitud": -0.35868480044764633
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Centro de Recuperación y Rehabilitación de Levante",
+    "latitud": 39.55322337597377,
+    "longitud": -0.4809035055502953
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Lluís Alcanyís",
+    "latitud": 39.00670686377464,
+    "longitud": -0.5096456415928943
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local - Unidad Molí del Sol",
+    "latitud": 39.48138180007104,
+    "longitud": -0.4095943014410094
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers Campanar",
+    "latitud": 39.48292758001002,
+    "longitud": -0.40594039593915443
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.624364197664015,
+    "longitud": -0.30457950695644814
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers d'Oliva",
+    "latitud": 38.909218289312555,
+    "longitud": -0.11042631271511068
+  },
+  {
+    "tipo": "police",
+    "nombre": "Comandància de la Guàrdia Civil",
+    "latitud": 39.46270474753946,
+    "longitud": -0.388571205284906
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Doctor Moliner",
+    "latitud": 39.655945191530684,
+    "longitud": -0.47434129924312934
+  },
+  {
+    "tipo": "police",
+    "nombre": "Casa Cuartel de la Guardia Civil",
+    "latitud": 38.836996685903394,
+    "longitud": -0.5144672351058533
+  },
+  {
+    "tipo": "ambulance_station",
+    "nombre": "Creu Roja",
+    "latitud": 38.83179412418114,
+    "longitud": -0.5134109375611704
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Municipal",
+    "latitud": 38.84152288635563,
+    "longitud": -0.5191849901828608
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parque de Bomberos de Sinarcas",
+    "latitud": 39.73300492993472,
+    "longitud": -1.2233111094311282
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers de Cullera",
+    "latitud": 39.1757388314004,
+    "longitud": -0.25888523760559473
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Comarcal Francesc De Borja",
+    "latitud": 38.96349122259541,
+    "longitud": -0.16970998336414586
+  },
+  {
+    "tipo": "police",
+    "nombre": "Central Policía Local Gandia",
+    "latitud": 38.97665293476611,
+    "longitud": -0.1836136897955272
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.46329808795388,
+    "longitud": -0.32867713580497127
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local de Alaquàs",
+    "latitud": 39.456648935095984,
+    "longitud": -0.4611961312137107
+  },
+  {
+    "tipo": "police",
+    "nombre": "Comisaría de Distrito Valencia Tránsitos",
+    "latitud": 39.48756903004394,
+    "longitud": -0.37850096322890153
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Sermesa",
+    "latitud": 39.47585827908198,
+    "longitud": -0.41838097748627123
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil",
+    "latitud": 39.16288753193432,
+    "longitud": -0.2581524840362229
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil - Verano",
+    "latitud": 39.1654892233409,
+    "longitud": -0.24478701617409707
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Vithas Aguas Vivas",
+    "latitud": 39.088122394482234,
+    "longitud": -0.3549680560317591
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital de Llíria",
+    "latitud": 39.6412795612325,
+    "longitud": -0.6194092090147423
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local",
+    "latitud": 38.99535755451591,
+    "longitud": -0.15833399197023046
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Nacional",
+    "latitud": 38.995319069620386,
+    "longitud": -0.15842216661499872
+  },
+  {
+    "tipo": "police",
+    "nombre": "Comisaría de Policía",
+    "latitud": 38.965249890994556,
+    "longitud": -0.1923840995008743
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parque de Bomberos de Cofrentes",
+    "latitud": 39.22487162369322,
+    "longitud": -1.0697060435445838
+  },
+  {
+    "tipo": "police",
+    "nombre": "Cuartel Guardia Civil",
+    "latitud": 39.06036771390872,
+    "longitud": -1.0601068756927103
+  },
+  {
+    "tipo": "police",
+    "nombre": "Cuartel de la Guardia Civil",
+    "latitud": 39.65905163578009,
+    "longitud": -0.22636076409145453
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local Sagunto",
+    "latitud": 39.67062603663985,
+    "longitud": -0.24580175170579682
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital de Sagunto (Mini Fe)",
+    "latitud": 39.674402696702,
+    "longitud": -0.23108298128758925
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers de Sagunt",
+    "latitud": 39.66817339549676,
+    "longitud": -0.2649584740186343
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil",
+    "latitud": 38.7651668582924,
+    "longitud": -0.6119100775792659
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers de Paterna",
+    "latitud": 39.513639051823816,
+    "longitud": -0.4612492310547203
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Universitario de la Ribera",
+    "latitud": 39.15988810806659,
+    "longitud": -0.4166861707580718
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital de Llíria",
+    "latitud": 39.64114620724517,
+    "longitud": -0.619245833460274
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Nacional",
+    "latitud": 39.46411755,
+    "longitud": -0.37893065000000004
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local Godella",
+    "latitud": 39.52840380719939,
+    "longitud": -0.42449701521625466
+  },
+  {
+    "tipo": "police",
+    "nombre": "Cuartel de la Guardia Civil",
+    "latitud": 38.94155722163726,
+    "longitud": -0.44714381696774014
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guarda Civil",
+    "latitud": 38.78118030255469,
+    "longitud": -0.7839127947834933
+  },
+  {
+    "tipo": "police",
+    "nombre": "Central de Policía Local de Valencia",
+    "latitud": 39.46765092664919,
+    "longitud": -0.3985929204112479
+  },
+  {
+    "tipo": "police",
+    "nombre": "CISE (Sala 092 PLV)",
+    "latitud": 39.467793767847475,
+    "longitud": -0.39896403509089395
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.58823072411547,
+    "longitud": -0.45391744998672606
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.59455945039808,
+    "longitud": -0.4659724481879811
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local Alzira",
+    "latitud": 39.15224765417259,
+    "longitud": -0.44136234176500005
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parque de Bomberos Voluntarios de Chelva",
+    "latitud": 39.75768064572931,
+    "longitud": -0.9953635592044323
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers de Silla",
+    "latitud": 39.36737662374651,
+    "longitud": -0.4207584434536192
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.591071287303336,
+    "longitud": -0.5533624017389515
+  },
+  {
+    "tipo": "police",
+    "nombre": "Cuartel de la Guardia Civil",
+    "latitud": 39.59553595612124,
+    "longitud": -0.5565881343427526
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.511855200917374,
+    "longitud": -0.35567302885996344
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local Turís",
+    "latitud": 39.392277967346864,
+    "longitud": -0.7101151508344511
+  },
+  {
+    "tipo": "police",
+    "nombre": "Comissaria de Policia Nacional de Russafa",
+    "latitud": 39.45627129376846,
+    "longitud": -0.36878212982104
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital IMED-Valencia",
+    "latitud": 39.502120560099634,
+    "longitud": -0.4083915224936251
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil",
+    "latitud": 39.366270311586824,
+    "longitud": -0.412693796890618
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local de Xàtiva",
+    "latitud": 38.99261662161752,
+    "longitud": -0.5220592213099168
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil de Tavernes de la Valldigna",
+    "latitud": 39.07696388666975,
+    "longitud": -0.2566866770788004
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local de Torrent",
+    "latitud": 39.432860273464435,
+    "longitud": -0.46300748477954384
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.43285346973912,
+    "longitud": -0.46277240241423917
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.28770176985869,
+    "longitud": -0.4147267760516715
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.287576169701694,
+    "longitud": -0.41499479677261064
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.2877871158931,
+    "longitud": -0.4149665459272779
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 38.917786837726446,
+    "longitud": -0.10943953672946453
+  },
+  {
+    "tipo": "police",
+    "nombre": "Municipal",
+    "latitud": 39.634604848732366,
+    "longitud": -0.5908408031671137
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.56667423075695,
+    "longitud": -1.2081522280861767
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local",
+    "latitud": 39.568780667192854,
+    "longitud": -1.2111143789330039
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local. Unitat de Districte 5. Trànsits",
+    "latitud": 39.49327641145758,
+    "longitud": -0.3849453768412452
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil Buñol",
+    "latitud": 39.41977284243461,
+    "longitud": -0.7888271468282564
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers de Pobla de Farnals",
+    "latitud": 39.5817439267876,
+    "longitud": -0.323225634361229
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Centre de Salut de Mislata",
+    "latitud": 39.47858180629106,
+    "longitud": -0.41490249430383846
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Vithas Valencia Consuelo",
+    "latitud": 39.46065676003373,
+    "longitud": -0.3873212891108176
+  },
+  {
+    "tipo": "police",
+    "nombre": "Casa Cuartel de la Guardia Civil",
+    "latitud": 39.47335341554854,
+    "longitud": -0.32598008018010544
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía portuaria de la Autoridad Portuaria de Valencia",
+    "latitud": 39.45328990702795,
+    "longitud": -0.3298262059982314
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local de Enguera",
+    "latitud": 38.97532211202818,
+    "longitud": -0.687832212975876
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Local",
+    "latitud": 39.50578104407814,
+    "longitud": -0.36490166949813446
+  },
+  {
+    "tipo": "police",
+    "nombre": "Casa Cuartel de la Guardia Civil",
+    "latitud": 39.45528597569749,
+    "longitud": -0.3315223006595764
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil",
+    "latitud": 39.70782379999999,
+    "longitud": -0.348952035437196
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers de Torrent",
+    "latitud": 39.4366731306553,
+    "longitud": -0.44386269231676984
+  },
+  {
+    "tipo": "police",
+    "nombre": "Cuartel de la Guardia Civil",
+    "latitud": 39.22786812282415,
+    "longitud": -1.064467093848402
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 38.897913949999996,
+    "longitud": -0.6888996500000002
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Nacional de Torrent",
+    "latitud": 39.430262613822705,
+    "longitud": -0.4790924109273163
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil Puesto de Xátiva",
+    "latitud": 38.991613763389246,
+    "longitud": -0.5152339538741554
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guàrdia Civil del Perellonet",
+    "latitud": 39.28030316806885,
+    "longitud": -0.28058795251792396
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 38.873995252975696,
+    "longitud": -0.7545177523575297
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 38.80717124303029,
+    "longitud": -0.8806938552743685
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil",
+    "latitud": 38.80358660328771,
+    "longitud": -0.8803713997844068
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Nacional",
+    "latitud": 38.82098476622205,
+    "longitud": -0.6092825173817614
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 38.82147578896274,
+    "longitud": -0.6090772893598743
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital General d'Ontinyent",
+    "latitud": 38.82011685715929,
+    "longitud": -0.6031492360039492
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital ISMKE",
+    "latitud": 39.45348288813277,
+    "longitud": -0.3367797356338321
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil",
+    "latitud": 39.69539756828918,
+    "longitud": -0.7060937953349677
+  },
+  {
+    "tipo": "police",
+    "nombre": "Ciutat Vella",
+    "latitud": 39.47703705467387,
+    "longitud": -0.38008355331682975
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil Benaguasil",
+    "latitud": 39.595737267543264,
+    "longitud": -0.5945466022414372
+  },
+  {
+    "tipo": "police",
+    "nombre": "Casa Cuartel Guardia Civil",
+    "latitud": 40.05808032587412,
+    "longitud": -1.2863389408004018
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia civil",
+    "latitud": 39.49028014479285,
+    "longitud": -1.1068445566625773
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parque de Bomberos de Requena",
+    "latitud": 39.499000921469694,
+    "longitud": -1.116343249646332
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.06035764007976,
+    "longitud": -1.0601238929090493
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guardia Civil",
+    "latitud": 38.974601350392014,
+    "longitud": -0.17569016168938
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Centre de Salut",
+    "latitud": 39.53511667697124,
+    "longitud": -0.3523873495293569
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital General d'Ontinyent",
+    "latitud": 38.810385498234126,
+    "longitud": -0.6074258758269223
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local de Corbera",
+    "latitud": 39.158825079673505,
+    "longitud": -0.35429656485322153
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers d'Alzira",
+    "latitud": 39.15840790315976,
+    "longitud": -0.4479110273111225
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Vithas València Túria",
+    "latitud": 39.44623256162183,
+    "longitud": -0.3707381002650661
+  },
+  {
+    "tipo": "hospital",
+    "nombre": "Hospital Psiquátrico de Bétera",
+    "latitud": 39.57651664096641,
+    "longitud": -0.44385430816295973
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local",
+    "latitud": 38.944146019302,
+    "longitud": -0.16460854933092503
+  },
+  {
+    "tipo": "police",
+    "nombre": "Jefatura superior de policia local Algemesí",
+    "latitud": 39.19495095924534,
+    "longitud": -0.4274597705601055
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers de Xàtiva",
+    "latitud": 39.00231630791402,
+    "longitud": -0.5276237336944419
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parque de Bomberos Voluntarios de Titaguas",
+    "latitud": 39.86739301811274,
+    "longitud": -1.088494667372593
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parque de Bomberos Voluntarios de Ayora",
+    "latitud": 39.05132472033502,
+    "longitud": -1.0475832875171425
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parque de Bomberos de Voluntarios de Navarrés",
+    "latitud": 39.079974511957914,
+    "longitud": -0.7032667410784036
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers Voluntaris de Vallada",
+    "latitud": 38.90751744679519,
+    "longitud": -0.6905725563197139
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers de l'Eliana",
+    "latitud": 39.57062428469642,
+    "longitud": -0.5191736852368548
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers de Burjassot",
+    "latitud": 39.50595988035631,
+    "longitud": -0.40960412440015587
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers de Catarroja",
+    "latitud": 39.4009456973004,
+    "longitud": -0.3927658114827212
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parque de Bomberos de Chiva",
+    "latitud": 39.451987951559644,
+    "longitud": -0.7364554693037212
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": "Parc de Bombers de Gandia",
+    "latitud": 38.99203335351889,
+    "longitud": -0.18318046390754456
+  },
+  {
+    "tipo": "police",
+    "nombre": "Guarderia",
+    "latitud": 39.06170531087851,
+    "longitud": -0.5121972306001419
+  },
+  {
+    "tipo": "police",
+    "nombre": "Comisaría de Policía Local de Cheste",
+    "latitud": 39.493741770207706,
+    "longitud": -0.6790942710708419
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local de Tavernes de la Valldigna",
+    "latitud": 39.06885485369805,
+    "longitud": -0.27209482313411204
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.45020694996541,
+    "longitud": -0.3683820600447085
+  },
+  {
+    "tipo": "police",
+    "nombre": "Casacuartel Guardiacivil",
+    "latitud": 39.07643740326867,
+    "longitud": -0.5154298309488903
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policía Nacional",
+    "latitud": 39.46021469805801,
+    "longitud": -0.41116274196284647
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local de València",
+    "latitud": 39.47183119999999,
+    "longitud": -0.3241194
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.15567185273133,
+    "longitud": -0.42666980600479343
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.300128575444376,
+    "longitud": -0.47818234521901515
+  },
+  {
+    "tipo": "police",
+    "nombre": NaN,
+    "latitud": 39.116118313474466,
+    "longitud": -0.45406557197653885
+  },
+  {
+    "tipo": "fire_station",
+    "nombre": NaN,
+    "latitud": 38.90755478625217,
+    "longitud": -0.6905031933666474
+  },
+  {
+    "tipo": "police",
+    "nombre": "Policia Local de Benetússer",
+    "latitud": 39.42061554695774,
+    "longitud": -0.4009124312859516
+  }
+]
