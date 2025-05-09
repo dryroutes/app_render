@@ -12,7 +12,7 @@ st.title("🚶‍♂️ Rutas seguras en Valencia")
 
 st.markdown("""
 <div style="background-color:#f0f0f5; padding:10px; border-radius:8px; margin-bottom:20px; color:#222;">
-    <strong>📅 Predicción meteorológica para el 8 de mayo de 2025 (Valencia):</strong><br>
+    <strong>📅 Predicción meteorológica para el 9 de mayo de 2025 (Valencia):</strong><br>
     🌥️ <em>Nublado con intervalos soleados</em><br>
     🌡️ Temperatura media: <strong>22 °C</strong><br>
     💨 Viento moderado del este: <strong>20 km/h</strong><br>
@@ -116,9 +116,9 @@ def cargar_subgrafo(nodo1, nodo2):
     return G, id_coords
 
 def cargar_recursos():
-    with open("datos/servicios_emergencia_provincia_valencia.json") as f1, \
-         open("datos/incidencias_valencia_2025-05-09.json") as f2, \
-         open("datos/parkings_valencia_binario.json") as f3:
+    with open("servicios_emergencia_provincia_valencia.json") as f1, \
+         open("incidencias_valencia_2025-05-09.json") as f2, \
+         open("parkings_valencia_binario.json") as f3:
         emergencia = json.load(f1)
         incidencias = json.load(f2)
         parkings = json.load(f3)
