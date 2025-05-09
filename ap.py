@@ -36,7 +36,7 @@ criterio = st.selectbox(
     }[x]
 )
 
-for key in ["grafo", "origen_coords", "destino_coords", "nodo1", "nodo2", "error", "nodos"]:
+for key in ["grafo", "origen_coords", "destino_coords", "nodo1", "nodo2", "error", "nodos", "parkings"]:
     if key not in st.session_state:
         st.session_state[key] = None
 
@@ -116,9 +116,9 @@ def cargar_subgrafo(nodo1, nodo2):
     return G, id_coords
 
 def cargar_recursos():
-    with open("servicios_emergencia_provincia_valencia.json") as f1, \
-         open("incidencias_valencia_2025-05-09.json") as f2, \
-         open("parkings_valencia_binario.json") as f3:
+    with open("datos/servicios_emergencia_provincia_valencia.json") as f1, \
+         open("datos/incidencias_valencia_2025-05-09.json") as f2, \
+         open("datos/parkings_valencia_binario.json") as f3:
         emergencia = json.load(f1)
         incidencias = json.load(f2)
         parkings = json.load(f3)
@@ -169,12 +169,11 @@ with col1:
             penalizar_riesgo(G, emergencia, incidencias)
 
             st.session_state.grafo = G
-            st.session_state.parkings = parkings
-
             st.session_state.origen_coords = (G.nodes[nodo1]["y"], G.nodes[nodo1]["x"])
             st.session_state.destino_coords = (G.nodes[nodo2]["y"], G.nodes[nodo2]["x"])
             st.session_state.nodo1 = nodo1
             st.session_state.nodo2 = nodo2
+            st.session_state.parkings = parkings
             st.session_state.error = None
 
         except Exception as e:
@@ -223,8 +222,7 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
                 if modo == "no dirigido":
                     st.warning("⚠️ Se ha usado modo *no dirigido*. La ruta puede no respetar el sentido real de las calles.")
 
-                    p = parking_cercano(y2, x2, st.session_state.parkings)
-    
+                p = parking_cercano(y2, x2, st.session_state.parkings)
                 if p["is_underground"] == 1:
                     if any(G[u][v].get("altura", 0) > 0 for u, v in zip(ruta[:-1], ruta[1:])):
                         st.warning("🚨 El parking más cercano es subterráneo y hay riesgo de inundación.")
