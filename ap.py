@@ -79,42 +79,6 @@ def buscar_direcciones(query):
     except:
         return []
 
-def cargar_subgrafo(nodo1, nodo2):
-    nodos_deseados = set()
-    todos_nodos = st.session_state.nodos
-    id_coords = {n["id"]: (n["y"], n["x"]) for n in todos_nodos}
-
-    lat1, lon1 = id_coords[nodo1]
-    lat2, lon2 = id_coords[nodo2]
-    d = distancia_coords(lat1, lon1, lat2, lon2)
-    radio = int(d / 2 + 800)
-    st.info(f"🔄 Cargando subgrafo con radio ~{radio} m para conectar los puntos...")
-
-    for n in todos_nodos:
-        lat, lon = n["y"], n["x"]
-        if (distancia_coords(lat1, lon1, lat, lon) < radio or
-            distancia_coords(lat2, lon2, lat, lon) < radio):
-            nodos_deseados.add(n["id"])
-
-    G = nx.DiGraph()
-    for n_id in nodos_deseados:
-        lat, lon = id_coords[n_id]
-        G.add_node(n_id, y=lat, x=lon)
-
-    for archivo in os.listdir("grafo/aristas"):
-        if archivo.endswith(".json"):
-            with open(f"grafo/aristas/{archivo}") as f:
-                for a in json.load(f):
-                    if a["origen"] in nodos_deseados and a["destino"] in nodos_deseados:
-                        G.add_edge(
-                            a["origen"], a["destino"],
-                            distancia=a["distancia"],
-                            tiempo=a["tiempo"],
-                            costo_total=a["costo_total"],
-                            altura=a["altura_media"]
-                        )
-    return G, id_coords
-
 def cargar_recursos():
     with open("servicios_emergencia_provincia_valencia.json") as f1, \
          open("incidencias_valencia_2025-05-09.json") as f2, \
@@ -139,6 +103,41 @@ def penalizar_riesgo(G, emergencia, incidencias):
 
 def parking_cercano(y_dest, x_dest, parkings):
     return min(parkings, key=lambda p: distancia_coords(y_dest, x_dest, p["lat"], p["lon"]))
+
+def cargar_subgrafo(nodo1, nodo2):
+    nodos_deseados = set()
+    todos_nodos = st.session_state.nodos
+    id_coords = {n["id"]: (n["y"], n["x"]) for n in todos_nodos}
+
+    lat1, lon1 = id_coords[nodo1]
+    lat2, lon2 = id_coords[nodo2]
+    d = distancia_coords(lat1, lon1, lat2, lon2)
+    radio = int(d / 2 + 800)
+    st.info(f"🔄 Cargando subgrafo con radio ~{radio} m para conectar los puntos...")
+
+    for n in todos_nodos:
+        lat, lon = n["y"], n["x"]
+        if (distancia_coords(lat1, lon1, lat, lon) < radio or distancia_coords(lat2, lon2, lat, lon) < radio):
+            nodos_deseados.add(n["id"])
+
+    G = nx.DiGraph()
+    for n_id in nodos_deseados:
+        lat, lon = id_coords[n_id]
+        G.add_node(n_id, y=lat, x=lon)
+
+    for archivo in os.listdir("grafo/aristas"):
+        if archivo.endswith(".json"):
+            with open(f"grafo/aristas/{archivo}") as f:
+                for a in json.load(f):
+                    if a["origen"] in nodos_deseados and a["destino"] in nodos_deseados:
+                        G.add_edge(
+                            a["origen"], a["destino"],
+                            distancia=a["distancia"],
+                            tiempo=a["tiempo"],
+                            costo_total=a["costo_total"],
+                            altura=a["altura_media"]
+                        )
+    return G, id_coords
 
 if st.session_state.nodos is None:
     st.session_state.nodos = cargar_nodos()
@@ -213,7 +212,7 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
 
             with col1:
                 st.success(f"Ruta encontrada ({len(ruta)} nodos, modo {modo})")
-                st.markdown(f"🧮 Criterio optimizado: **{criterio}**")
+                st.markdown(f"🧶 Criterio optimizado: **{criterio}**")
                 st.markdown(f"📏 Distancia total: **{distancia_total:.1f} m**")
                 st.markdown(f"⏱️ Tiempo estimado: **{tiempo_total:.0f} segundos**")
                 st.markdown(f"⚠️ Aristas con riesgo: **{aristas_riesgo}**")
@@ -223,13 +222,16 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
                     st.warning("⚠️ Se ha usado modo *no dirigido*. La ruta puede no respetar el sentido real de las calles.")
 
                 p = parking_cercano(y2, x2, st.session_state.parkings)
+                direccion_p = reverse_geocode(p["lat"], p["lon"])
+                folium.Marker([p["lat"], p["lon"]], tooltip=direccion_p, icon=folium.Icon(color="blue", icon="info-sign")).add_to(m)
+
                 if p["is_underground"] == 1:
                     if any(G[u][v].get("altura", 0) > 0 for u, v in zip(ruta[:-1], ruta[1:])):
-                        st.warning("🚨 El parking más cercano es subterráneo y hay riesgo de inundación.")
+                        st.warning(f"🚨 El parking más cercano es subterráneo y hay riesgo de inundación. ({direccion_p})")
                     else:
-                        st.info("ℹ️ El parking más cercano es subterráneo.")
+                        st.info(f"ℹ️ El parking más cercano es subterráneo. ({direccion_p})")
                 else:
-                    st.success("🅿️ El parking más cercano es en superficie.")
+                    st.success(f"🄹 El parking más cercano es en superficie. ({direccion_p})")
 
     except Exception as e:
         with col1:
