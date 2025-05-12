@@ -109,10 +109,11 @@ def cargar_subgrafo(nodo1, nodo2):
     for n_id in nodos_deseados:
         lat, lon = id_coords[n_id]
         G.add_node(n_id, y=lat, x=lon)
+        import gzip
 
     for archivo in os.listdir("grafo/aristas"):
-        if archivo.endswith(".json"):
-            with open(f"grafo/aristas/{archivo}") as f:
+        if archivo.endswith(".json.gz"):
+            with gzip.open(f"grafo/aristas/{archivo}", "rt", encoding="utf-8") as f:
                 for a in json.load(f):
                     if a["origen"] in nodos_deseados and a["destino"] in nodos_deseados:
                         G.add_edge(
@@ -122,6 +123,7 @@ def cargar_subgrafo(nodo1, nodo2):
                             costo_total=a.get("costo_total", 1),
                             altura=a.get("altura_media", 0)
                         )
+
     return G, id_coords
 
 if st.session_state.nodos is None:
