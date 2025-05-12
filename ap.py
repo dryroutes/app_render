@@ -218,8 +218,18 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
                 modo = "undirected unweighted"
 
         if ruta:
-            coords = [(G.nodes[n]["y"], G.nodes[n]["x"]) for n in ruta]
-            folium.PolyLine(coords, color="blue", weight=4).add_to(m)
+            for u, v in zip(ruta[:-1], ruta[1:]):
+                if G.has_edge(u, v):
+                    edge = G[u][v]
+                elif G.has_edge(v, u):
+                    edge = G[v][u]
+                else:
+                    continue
+            
+                color = "red" if edge.get("altura", 0) > 0 else "blue"
+                coords = [(G.nodes[u]["y"], G.nodes[u]["x"]), (G.nodes[v]["y"], G.nodes[v]["x"])]
+                folium.PolyLine(coords, color=color, weight=5).add_to(m)
+
             distancia_total = 0
             tiempo_total = 0
             aristas_riesgo = 0
@@ -244,7 +254,7 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
                 st.markdown(f"📏 Total distance: **{distancia_total:.1f} m**")
                 st.markdown(f"⏱️ Estimated time: **{tiempo_total:.0f} seconds**")
                 st.markdown(f"⚠️ Risky segments: **{aristas_riesgo}**")
-                st.markdown(f"⚠️ Risky nodes: **{nodos_riesgo}**")
+
 
                 if "unweighted" in modo:
                     st.warning("⚠️ The selected criterion was missing in some edges. Used fallback path without weights.")
