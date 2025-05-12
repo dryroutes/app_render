@@ -62,23 +62,7 @@ def nodo_mas_cercano(lat, lon, nodos):
     return min(nodos, key=lambda n: distancia_coords(lat, lon, n["y"], n["x"]))["id"]
 
 def reverse_geocode(lat, lon):
-    try:
-        url = f"https://nominatim.openstreetmap.org/reverse?format=json&lat={lat}&lon={lon}&zoom=17&addressdetails=0"
-        headers = {"User-Agent": "grafo-app"}
-        r = requests.get(url, headers=headers, timeout=4)
-        return r.json().get("display_name", "Unknown location")
-    except:
-        return "Unknown location"
-
-def buscar_direcciones(query):
-    try:
-        url = f"https://photon.komoot.io/api/?q={query}, Valencia, Spain&limit=5"
-        r = requests.get(url, timeout=4)
-        resultados = r.json()["features"]
-        return [(res["properties"].get("name", "") + ", " + res["properties"].get("city", ""),
-                 res["geometry"]["coordinates"][1], res["geometry"]["coordinates"][0]) for res in resultados]
-    except:
-        return []
+    return f"{lat:.5f}, {lon:.5f}"
 
 def cargar_recursos():
     with open("servicios_emergencia_provincia_valencia.json") as f1, \
@@ -146,18 +130,26 @@ if st.session_state.nodos is None:
 col1, col2 = st.columns([1, 2])
 
 with col1:
-    query1 = st.text_input("📍 Origin address")
-    opc1 = buscar_direcciones(query1) if query1 else []
-    sel1 = st.selectbox("Select origin", opc1, format_func=lambda x: x[0]) if opc1 else None
+    origenes = [
+        ("Av. País Valencià, Paiporta", 39.42966, -0.41488),
+        ("Calle Picanya, Valencia", 39.46400, -0.40312),
+        ("Calle Mayor, Sedaví", 39.42585, -0.38217),
+        ("Calle San Vicente, Aldaia", 39.46610, -0.46050),
+        ("Av. del Cid, Valencia", 39.47153, -0.40540)
+    ]
 
-    query2 = st.text_input("🎯 Destination address")
-    opc2 = buscar_direcciones(query2) if query2 else []
-    sel2 = st.selectbox("Select destination", opc2, format_func=lambda x: x[0]) if opc2 else None
+    destinos = [
+        ("Calle Ausiàs March, Catarroja", 39.40470, -0.41512),
+        ("Av. Blasco Ibáñez, Torrent", 39.43794, -0.46526),
+        ("Plaza del Ayuntamiento, Valencia", 39.46994, -0.37629),
+        ("Av. Albufera, Alfafar", 39.42481, -0.38191),
+        ("Calle Valencia, Benetússer", 39.42861, -0.39243)
+    ]
+
+    sel1 = st.selectbox("📍 Select origin", origenes, index=0, format_func=lambda x: x[0])
+    sel2 = st.selectbox("🎯 Select destination", destinos, index=1, format_func=lambda x: x[0])
 
     if st.button("Calculate route"):
-        if not sel1 or not sel2:
-            st.warning("Please select both addresses from the dropdowns.")
-            st.stop()
         try:
             lat1, lon1 = sel1[1], sel1[2]
             lat2, lon2 = sel2[1], sel2[2]
