@@ -220,10 +220,22 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
         if ruta:
             coords = [(G.nodes[n]["y"], G.nodes[n]["x"]) for n in ruta]
             folium.PolyLine(coords, color="blue", weight=4).add_to(m)
-
-            distancia_total = sum(G[u][v].get("distancia", 0) for u, v in zip(ruta[:-1], ruta[1:]))
-            tiempo_total = sum(G[u][v].get("tiempo", 0) for u, v in zip(ruta[:-1], ruta[1:])) * 60
-            aristas_riesgo = sum(1 for u, v in zip(ruta[:-1], ruta[1:]) if G[u][v].get("altura", 0) > 0)
+            distancia_total = 0
+            tiempo_total = 0
+            aristas_riesgo = 0
+            
+            for u, v in zip(ruta[:-1], ruta[1:]):
+                if G.has_edge(u, v):
+                    edge = G[u][v]
+                elif G.has_edge(v, u):  # fallback en caso de grafo no dirigido
+                    edge = G[v][u]
+                else:
+                    continue  # arista no encontrada
+            
+                distancia_total += edge.get("distancia", 0)
+                tiempo_total += edge.get("tiempo", 0)
+                if edge.get("altura", 0) > 0:
+                    aristas_riesgo += 1
             nodos_riesgo = sum(1 for n in ruta if G.nodes[n].get("altura", 0) > 0)
 
             with col1:
