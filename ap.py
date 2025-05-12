@@ -117,10 +117,10 @@ def cargar_subgrafo(nodo1, nodo2):
                     if a["origen"] in nodos_deseados and a["destino"] in nodos_deseados:
                         G.add_edge(
                             a["origen"], a["destino"],
-                            distancia=a["distancia"],
-                            tiempo=a["tiempo"],
-                            costo_total=a["costo_total"],
-                            altura=a["altura_media"]
+                            distancia=a.get("distancia", 1),
+                            tiempo=a.get("tiempo", 1),
+                            costo_total=a.get("costo_total", 1),
+                            altura=a.get("altura_media", 0)
                         )
     return G, id_coords
 
@@ -186,13 +186,23 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
 
     try:
         ruta = None
-        modo = "directed"
+        modo = ""
+        pesos_validos = all(criterio in data for _, _, data in G.edges(data=True))
 
         if nx.has_path(G, nodo1, nodo2):
-            ruta = nx.shortest_path(G, nodo1, nodo2, weight=criterio)
+            if pesos_validos:
+                ruta = nx.shortest_path(G, nodo1, nodo2, weight=criterio)
+                modo = "directed with weight"
+            else:
+                ruta = nx.shortest_path(G, nodo1, nodo2)
+                modo = "directed unweighted"
         elif nx.has_path(G.to_undirected(), nodo1, nodo2):
-            ruta = nx.shortest_path(G.to_undirected(), nodo1, nodo2, weight=criterio)
-            modo = "undirected"
+            if pesos_validos:
+                ruta = nx.shortest_path(G.to_undirected(), nodo1, nodo2, weight=criterio)
+                modo = "undirected with weight"
+            else:
+                ruta = nx.shortest_path(G.to_undirected(), nodo1, nodo2)
+                modo = "undirected unweighted"
 
         if ruta:
             coords = [(G.nodes[n]["y"], G.nodes[n]["x"]) for n in ruta]
@@ -204,25 +214,24 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
             nodos_riesgo = sum(1 for n in ruta if G.nodes[n].get("altura", 0) > 0)
 
             with col1:
-                st.success(f"Route found ({len(ruta)} nodes, mode {modo})")
+                st.success(f"Route found ({len(ruta)} nodes, {modo})")
                 st.markdown(f"🧶 Optimized criterion: **{criterio}**")
                 st.markdown(f"📏 Total distance: **{distancia_total:.1f} m**")
                 st.markdown(f"⏱️ Estimated time: **{tiempo_total:.0f} seconds**")
                 st.markdown(f"⚠️ Risky segments: **{aristas_riesgo}**")
                 st.markdown(f"⚠️ Risky nodes: **{nodos_riesgo}**")
 
-                if modo == "undirected":
-                    st.warning("⚠️ Undirected mode was used. The route may not respect real street directions.")
+                if "unweighted" in modo:
+                    st.warning("⚠️ The selected criterion was missing in some edges. Used fallback path without weights.")
 
                 p = parking_cercano(y2, x2, st.session_state.parkings)
                 direccion_p = reverse_geocode(p["lat"], p["lon"])
                 folium.Marker([p["lat"], p["lon"]], tooltip=direccion_p, icon=folium.Icon(color="blue", icon="info-sign")).add_to(m)
 
-                if p["is_underground"] == 1:
-                    if any(G[u][v].get("altura", 0) > 0 for u, v in zip(ruta[:-1], ruta[1:])):
-                        st.warning(f"🚨 The nearest parking is underground and there is flood risk. ({direccion_p})")
-                    else:
-                        st.info(f"ℹ️ The nearest parking is underground. ({direccion_p})")
+                if p["is_underground"] == 1 and aristas_riesgo > 0:
+                    st.warning(f"🚨 The nearest parking is underground and there is flood risk. ({direccion_p})")
+                elif p["is_underground"] == 1:
+                    st.info(f"ℹ️ The nearest parking is underground. ({direccion_p})")
                 else:
                     st.success(f"🄹 The nearest parking is at street level. ({direccion_p})")
 
