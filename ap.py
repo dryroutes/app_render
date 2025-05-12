@@ -156,6 +156,17 @@ with col1:
             nodo1 = nodo_mas_cercano(lat1, lon1, st.session_state.nodos)
             nodo2 = nodo_mas_cercano(lat2, lon2, st.session_state.nodos)
             G, id_coords = cargar_subgrafo(nodo1, nodo2)
+            # 👇 Diagnóstico inmediato
+            num_nodos = G.number_of_nodes()
+            num_aristas = G.number_of_edges()
+            ejemplo_arista = next(iter(G.edges(data=True)), None)
+            
+            st.warning(f"🧠 Subgraph loaded: {num_nodos} nodes, {num_aristas} edges.")
+            if ejemplo_arista:
+                st.info(f"Example edge data: {ejemplo_arista[2]}")
+            else:
+                st.error("⚠️ No edges found in the subgraph.")
+
 
             emergencia, incidencias, parkings = cargar_recursos()
             penalizar_riesgo(G, emergencia, incidencias)
