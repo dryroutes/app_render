@@ -12,7 +12,7 @@ st.title("🚶‍♂️ Safe Routes in Valencia")
 
 st.markdown("""
 <div style="background-color:#f0f0f5; padding:10px; border-radius:8px; margin-bottom:20px; color:#222;">
-    <strong>📅 Weather forecast for May 9, 2025 (Valencia):</strong><br>
+    <strong>📅 Weather forecast :</strong><br>
     ⛈️ <em>Severe storm with torrential rain and localized flooding</em><br>
     🌡️ Average temperature: <strong>19 °C</strong><br>
     💨 Strong easterly winds: <strong>45 km/h</strong><br>
