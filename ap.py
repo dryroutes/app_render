@@ -211,6 +211,29 @@ with col2:
         folium.Marker([y1, x1], tooltip="Origin", icon=folium.Icon(color="green")).add_to(m)
         folium.Marker([y2, x2], tooltip="Destination", icon=folium.Icon(color="red")).add_to(m)
 
+        # Mostrar incidencias dentro del radio general del subgrafo
+        for inc in incidencias:
+            if "lat" in inc and "lng" in inc:
+                if (distancia_coords(inc["lat"], inc["lng"], y1, x1) < radio) or (distancia_coords(inc["lat"], inc["lng"], y2, x2) < radio):
+                    folium.CircleMarker(
+                        [inc["lat"], inc["lng"]],
+                        radius=6, color="orange", fill=True,
+                        fill_opacity=0.7, tooltip="Incidencia"
+                    ).add_to(m)
+        
+        # Mostrar servicios de emergencia dentro del radio general del subgrafo
+        for s in emergencia:
+            lat = s.get("latitud", s.get("lat"))
+            lon = s.get("longitud", s.get("lng"))
+            if lat and lon:
+                if (distancia_coords(lat, lon, y1, x1) < radio) or (distancia_coords(lat, lon, y2, x2) < radio):
+                    folium.CircleMarker(
+                        [lat, lon],
+                        radius=6, color="purple", fill=True,
+                        fill_opacity=0.7, tooltip=s.get("nombre", "Servicio de emergencia")
+                    ).add_to(m)
+
+
         pesos_validos = all(criterio in data for _, _, data in G.edges(data=True))
         if nx.has_path(G, nodo1, nodo2):
             ruta = nx.shortest_path(G, nodo1, nodo2, weight=criterio if pesos_validos else None)
@@ -237,30 +260,6 @@ with col2:
             color = "red" if altura > 0 else "blue"
             folium.PolyLine([(y_u, x_u), (y_v, x_v)], color=color, weight=5).add_to(m)
                         # Añadir incidencias cercanas
-            for inc in incidencias:
-                if "lat" in inc and "lng" in inc:
-                    for n in ruta:
-                        y, x = G.nodes[n]["y"], G.nodes[n]["x"]
-                        if distancia_coords(y, x, inc["lat"], inc["lng"]) < 150:
-                            folium.CircleMarker([inc["lat"], inc["lng"]],
-                                radius=6, color="orange", fill=True,
-                                fill_opacity=0.7, tooltip="Incidencia cercana"
-                            ).add_to(m)
-                            break
-            
-            # Añadir servicios de emergencia cercanos
-            for s in emergencia:
-                lat = s.get("latitud", s.get("lat"))
-                lon = s.get("longitud", s.get("lng"))
-                if lat and lon:
-                    for n in ruta:
-                        y, x = G.nodes[n]["y"], G.nodes[n]["x"]
-                        if distancia_coords(y, x, lat, lon) < 150:
-                            folium.CircleMarker([lat, lon],
-                                radius=6, color="purple", fill=True,
-                                fill_opacity=0.7, tooltip=s.get("nombre", "Servicio de emergencia")
-                            ).add_to(m)
-                            break
 
         
         if criterio == "altura":
