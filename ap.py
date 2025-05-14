@@ -249,25 +249,27 @@ if st.session_state.grafo:
             st_folium(m, width=700, height=500, key="map_rendered")
 
         with st.expander("🧾 Route details and download"):
-            distancia_total = sum(G[u][v].get("distancia", 0) for u, v in zip(ruta[:-1], ruta[1:]) if G.has_edge(u, v))
-            tiempo_total = sum(G[u][v].get("tiempo", 0) for u, v in zip(ruta[:-1], ruta[1:]) if G.has_edge(u, v))
-            riesgo = sum(1 for u, v in zip(ruta[:-1], ruta[1:]) if G.has_edge(u, v) and G[u][v].get("altura", 0) > 0)
+            try:
+                distancia_total = sum(G[u][v].get("distancia", 0) for u, v in zip(ruta[:-1], ruta[1:]) if G.has_edge(u, v))
+                tiempo_total = sum(G[u][v].get("tiempo", 0) for u, v in zip(ruta[:-1], ruta[1:]) if G.has_edge(u, v))
+                riesgo = sum(1 for u, v in zip(ruta[:-1], ruta[1:]) if G.has_edge(u, v) and G[u][v].get("altura", 0) > 0)
 
-            st.write(f"📏 Total distance: {distancia_total:.1f} m")
-            st.write(f"⏱️ Estimated time: {tiempo_total:.0f} seconds")
-            st.write(f"⚠️ Risky segments: {riesgo}")
+                st.write(f"📏 Total distance: {distancia_total:.1f} m")
+                st.write(f"⏱️ Estimated time: {tiempo_total:.0f} seconds")
+                st.write(f"⚠️ Risky segments: {riesgo}")
 
-            # Guardar el mapa como HTML y permitir su descarga
-            map_html_path = "map_output.html"
-            m.save(map_html_path)
-            with open(map_html_path, "rb") as f:
-                st.download_button(
-                    label="📥 Download map as HTML",
-                    data=f,
-                    file_name="safe_route_map.html",
-                    mime="text/html"
-                )
-
+                # Guardar mapa como HTML para descarga
+                map_html_path = "map_output.html"
+                m.save(map_html_path)
+                with open(map_html_path, "rb") as f:
+                    st.download_button(
+                        label="📥 Download map as HTML",
+                        data=f.read(),
+                        file_name="safe_route_map.html",
+                        mime="text/html"
+                    )
+            except Exception as e:
+                st.error(f"Error generating route summary or download button: {e}")
 # Nota: para generar imagen, deberías usar selenium o folium-screenshot desde fuera de Streamlit
 st.download_button(
     label="📥 Download map HTML",
@@ -276,8 +278,6 @@ st.download_button(
     mime="text/html"
 )
 
-    except Exception as e:
-        st.error(f"Error calculating route: {e}")
 
 elif st.session_state.error:
     st.error(st.session_state.error)
