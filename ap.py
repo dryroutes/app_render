@@ -27,9 +27,7 @@ criterio = st.selectbox(
     "🔎 What criterion do you want to optimize for the safest route?",
     options={
         "distancia": "Shortest route (distance)",
-        "tiempo": "Fastest route (time)",
         "altura": "Route with lowest flood level (water height)",
-        "costo_total": "Route with lowest estimated risk"
     },
     format_func=lambda x: {
         "distancia": "Shortest route (distance)",
