@@ -270,6 +270,8 @@ if st.session_state.grafo:
                             )
                     except Exception as e:
                         st.error(f"Error generating route summary or download button: {e}")
+        except: 
+            continue
         # Nota: para generar imagen, deberías usar selenium o folium-screenshot desde fuera de Streamlit
 
 
