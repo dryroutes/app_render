@@ -271,12 +271,6 @@ if st.session_state.grafo:
                     except Exception as e:
                         st.error(f"Error generating route summary or download button: {e}")
         # Nota: para generar imagen, deberías usar selenium o folium-screenshot desde fuera de Streamlit
-st.download_button(
-    label="📥 Download map HTML",
-    data=open(map_html_path, "rb"),
-    file_name="safe_route_map.html",
-    mime="text/html"
-)
 
 
 elif st.session_state.error:
