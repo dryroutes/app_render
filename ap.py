@@ -261,9 +261,7 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
 
             with col1:
                 st.success(f"Route found ({len(ruta)} nodes, {modo})")
-                st.markdown(f"🧶 Optimized criterion: **{criterio}**")
                 st.markdown(f"📏 Total distance: **{distancia_total:.1f} m**")
-                st.markdown(f"⏱️ Estimated time: **{tiempo_total:.0f} seconds**")
                 st.markdown(f"⚠️ Risky segments: **{aristas_riesgo}**")
 
 
