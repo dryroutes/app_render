@@ -77,20 +77,27 @@ def cargar_recursos():
         incidencias = json.load(f2)
         parkings = json.load(f3)
     return emergencia, incidencias, parkings
-
 def penalizar_riesgo(G, emergencia, incidencias):
+    puntos = []
+
+    for inc in incidencias:
+        if "lat" in inc and "lng" in inc:
+            puntos.append((inc["lat"], inc["lng"]))
+    for s in emergencia:
+        lat = s.get("latitud", s.get("lat"))
+        lon = s.get("longitud", s.get("lng"))
+        if lat and lon:
+            puntos.append((lat, lon))
+
     for u, v, data in G.edges(data=True):
         if data.get("altura", 0) > 0:
             y, x = G.nodes[u]["y"], G.nodes[u]["x"]
-            for recurso in emergencia + incidencias:
-                ry = recurso.get("latitud", recurso.get("lat"))
-                rx = recurso.get("longitud", recurso.get("lng"))
+            for ry, rx in puntos:
                 if distancia_coords(y, x, ry, rx) < 150:
                     for k in ["distancia", "tiempo", "costo_total", "altura"]:
                         if k in data:
                             data[k] *= 2
                     break
-
 def parking_cercano(y_dest, x_dest, parkings):
     return min(parkings, key=lambda p: distancia_coords(y_dest, x_dest, p["lat"], p["lon"]))
 
@@ -191,11 +198,29 @@ if st.session_state.grafo:
     m = folium.Map(location=[(y1 + y2)/2, (x1 + x2)/2], zoom_start=14)
     folium.Marker([y1, x1], tooltip=reverse_geocode(y1, x1), icon=folium.Icon(color="green")).add_to(m)
     folium.Marker([y2, x2], tooltip=reverse_geocode(y2, x2), icon=folium.Icon(color="red")).add_to(m)
-
     for inc in incidencias:
-        folium.CircleMarker([inc["lat"], inc["lng"]], radius=6, color="orange", fill=True, fill_opacity=0.7, tooltip="Incidencia").add_to(m)
+        if "lat" in inc and "lng" in inc:
+            folium.CircleMarker(
+                location=[inc["lat"], inc["lng"]],
+                radius=6,
+                color="orange",
+                fill=True,
+                fill_opacity=0.7,
+                tooltip=f"Incidencia ({inc.get('nivel', 'Sin nivel')})"
+            ).add_to(m)
+    
     for s in emergencia:
-        folium.CircleMarker([s.get("latitud", s.get("lat")), s.get("longitud", s.get("lng"))], radius=6, color="purple", fill=True, fill_opacity=0.7, tooltip="Servicio emergencia").add_to(m)
+        lat = s.get("latitud", s.get("lat"))
+        lon = s.get("longitud", s.get("lng"))
+        if lat and lon:
+            folium.CircleMarker(
+                location=[lat, lon],
+                radius=6,
+                color="purple",
+                fill=True,
+                fill_opacity=0.7,
+                tooltip=s.get("nombre", "Servicio emergencia")
+            ).add_to(m)
 
     try:
         pesos_validos = all(criterio in data for _, _, data in G.edges(data=True))
