@@ -1,23 +1,21 @@
 import streamlit as st
+import requests
 import networkx as nx
 import json
 import os
 import folium
 from streamlit_folium import st_folium
 from math import radians, cos, sin, sqrt, atan2
-import gzip
-from PIL import Image
-import io
 
 st.set_page_config(layout="wide")
-st.title("🚶‍♂️ Safe Routes in L'Horta Sud")
+st.title("🚶‍♂️ Safe Routes in Valencia")
 
 st.markdown("""
 <div style="background-color:#f0f0f5; padding:10px; border-radius:8px; margin-bottom:20px; color:#222;">
-    <strong>🗕️ Weather forecast :</strong><br>
+    <strong>📅 Weather forecast :</strong><br>
     ⛈️ <em>Severe storm with torrential rain and localized flooding</em><br>
     🌡️ Average temperature: <strong>19 °C</strong><br>
-    🌬️ Strong easterly winds: <strong>45 km/h</strong><br>
+    💨 Strong easterly winds: <strong>45 km/h</strong><br>
     🌧️ Rain probability: <strong>100%</strong><br>
     ⚠️ <strong>Red alert for potential flash floods</strong>
 </div>
@@ -27,7 +25,9 @@ criterio = st.selectbox(
     "🔎 What criterion do you want to optimize for the safest route?",
     options={
         "distancia": "Shortest route (distance)",
+        "tiempo": "Fastest route (time)",
         "altura": "Route with lowest flood level (water height)",
+        "costo_total": "Route with lowest estimated risk"
     },
     format_func=lambda x: {
         "distancia": "Shortest route (distance)",
@@ -37,20 +37,26 @@ criterio = st.selectbox(
     }[x]
 )
 
-for key in ["grafo", "origen_coords", "destino_coords", "nodo1", "nodo2", "error", "nodos", "parkings", "incidencias", "emergencia", "ruta"]:
+for key in ["grafo", "origen_coords", "destino_coords", "nodo1", "nodo2", "error", "nodos", "parkings"]:
     if key not in st.session_state:
         st.session_state[key] = None
 
 @st.cache_data
+@st.cache_data
 def cargar_nodos():
+    import gzip
     nodos = []
     carpeta = "grafo/nodos"
     if not os.path.exists(carpeta):
+        st.warning("⚠️ 'grafo/nodos' folder not found.")
         return nodos
     for archivo in os.listdir(carpeta):
         if archivo.endswith(".json.gz"):
-            with gzip.open(os.path.join(carpeta, archivo), "rt", encoding="utf-8") as f:
-                nodos.extend(json.load(f))
+            try:
+                with gzip.open(os.path.join(carpeta, archivo), "rt", encoding="utf-8") as f:
+                    nodos.extend(json.load(f))
+            except Exception as e:
+                st.warning(f"⚠️ Error reading {archivo}: {e}")
     return nodos
 
 def distancia_coords(lat1, lon1, lat2, lon2):
@@ -79,28 +85,17 @@ def cargar_recursos():
     return emergencia, incidencias, parkings
 
 def penalizar_riesgo(G, emergencia, incidencias):
-    puntos = []
-    for inc in incidencias:
-        if "lat" in inc and "lng" in inc:
-            puntos.append((inc["lat"], inc["lng"]))
-    for s in emergencia:
-        lat = s.get("latitud", s.get("lat"))
-        lon = s.get("longitud", s.get("lng"))
-        if lat and lon:
-            puntos.append((lat, lon))
     for u, v, data in G.edges(data=True):
         if data.get("altura", 0) > 0:
-            # Penalización por proximidad a puntos críticos
             y, x = G.nodes[u]["y"], G.nodes[u]["x"]
-            for ry, rx in puntos:
+            for recurso in emergencia + incidencias:
+                ry = recurso.get("latitud", recurso.get("lat"))
+                rx = recurso.get("longitud", recurso.get("lng"))
                 if distancia_coords(y, x, ry, rx) < 150:
                     for k in ["distancia", "tiempo", "costo_total", "altura"]:
                         if k in data:
                             data[k] *= 2
                     break
-        # Penalización extrema si el criterio es altura o costo_total
-        if criterio in ["altura", "costo_total"] and data.get("altura", 0) > 0:
-            data[criterio] += 1e6  # Penalización muy fuerte
 
 def parking_cercano(y_dest, x_dest, parkings):
     return min(parkings, key=lambda p: distancia_coords(y_dest, x_dest, p["lat"], p["lon"]))
@@ -125,6 +120,7 @@ def cargar_subgrafo(nodo1, nodo2):
     for n_id in nodos_deseados:
         lat, lon = id_coords[n_id]
         G.add_node(n_id, y=lat, x=lon)
+        import gzip
 
     for archivo in os.listdir("grafo/aristas"):
         if archivo.endswith(".json.gz"):
@@ -138,12 +134,13 @@ def cargar_subgrafo(nodo1, nodo2):
                             costo_total=a.get("costo_total", 1),
                             altura=a.get("altura_media", 0)
                         )
-    return G, id_coords , radio
+
+    return G, id_coords
 
 if st.session_state.nodos is None:
     st.session_state.nodos = cargar_nodos()
 
-col1, col2 = st.columns([1, 3])
+col1, col2 = st.columns([1, 2])
 
 with col1:
     origenes = [
@@ -163,7 +160,7 @@ with col1:
     ]
 
     sel1 = st.selectbox("📍 Select origin", origenes, index=0, format_func=lambda x: x[0])
-    sel2 = st.selectbox("🌟 Select destination", destinos, index=1, format_func=lambda x: x[0])
+    sel2 = st.selectbox("🎯 Select destination", destinos, index=1, format_func=lambda x: x[0])
 
     if st.button("Calculate route"):
         try:
@@ -171,105 +168,125 @@ with col1:
             lat2, lon2 = sel2[1], sel2[2]
             nodo1 = nodo_mas_cercano(lat1, lon1, st.session_state.nodos)
             nodo2 = nodo_mas_cercano(lat2, lon2, st.session_state.nodos)
-            G, id_coords,radio = cargar_subgrafo(nodo1, nodo2)
+            G, id_coords = cargar_subgrafo(nodo1, nodo2)
+            # 👇 Diagnóstico inmediato
+            num_nodos = G.number_of_nodes()
+            num_aristas = G.number_of_edges()
+            ejemplo_arista = next(iter(G.edges(data=True)), None)
+            
+            st.warning(f"🧠 Subgraph loaded: {num_nodos} nodes, {num_aristas} edges.")
+            if ejemplo_arista:
+                st.info(f"Example edge data: {ejemplo_arista[2]}")
+            else:
+                st.error("⚠️ No edges found in the subgraph.")
+
+
             emergencia, incidencias, parkings = cargar_recursos()
             penalizar_riesgo(G, emergencia, incidencias)
 
-            st.session_state.update({
-                "grafo": G,
-                "origen_coords": (G.nodes[nodo1]["y"], G.nodes[nodo1]["x"]),
-                "destino_coords": (G.nodes[nodo2]["y"], G.nodes[nodo2]["x"]),
-                "nodo1": nodo1,
-                "nodo2": nodo2,
-                "parkings": parkings,
-                "incidencias": incidencias,
-                "emergencia": emergencia,
-                "ruta": [],
-                "error": None
-            })
+            st.session_state.grafo = G
+            st.session_state.origen_coords = (G.nodes[nodo1]["y"], G.nodes[nodo1]["x"])
+            st.session_state.destino_coords = (G.nodes[nodo2]["y"], G.nodes[nodo2]["x"])
+            st.session_state.nodo1 = nodo1
+            st.session_state.nodo2 = nodo2
+            st.session_state.parkings = parkings
+            st.session_state.error = None
+
         except Exception as e:
+            st.session_state.grafo = None
             st.session_state.error = str(e)
-with col2:
+
+if st.session_state.grafo and st.session_state.origen_coords and st.session_state.destino_coords:
+    G = st.session_state.grafo
+    y1, x1 = st.session_state.origen_coords
+    y2, x2 = st.session_state.destino_coords
+    nodo1 = st.session_state.nodo1
+    nodo2 = st.session_state.nodo2
+
+    m = folium.Map(location=[(y1 + y2)/2, (x1 + x2)/2], zoom_start=14)
+
+    folium.Marker([y1, x1], tooltip=reverse_geocode(y1, x1), icon=folium.Icon(color="green")).add_to(m)
+    folium.Marker([y2, x2], tooltip=reverse_geocode(y2, x2), icon=folium.Icon(color="red")).add_to(m)
+
     try:
-        G = st.session_state.grafo
-        y1, x1 = st.session_state.origen_coords
-        y2, x2 = st.session_state.destino_coords
-        nodo1 = st.session_state.nodo1
-        nodo2 = st.session_state.nodo2
-        incidencias = st.session_state.incidencias
-        emergencia = st.session_state.emergencia
-
-        # Penalizar muchísimo las aristas con altura si el criterio es altura o riesgo
-        if criterio in ("altura", "costo_total"):
-            for u, v, data in G.edges(data=True):
-                if data.get("altura", 0) > 0:
-                    if criterio in data:
-                        data[criterio] *= 1000
-
-
-        m = folium.Map(location=[(y1 + y2)/2, (x1 + x2)/2], zoom_start=14)
-        folium.Marker([y1, x1], tooltip="Origin", icon=folium.Icon(color="green")).add_to(m)
-        folium.Marker([y2, x2], tooltip="Destination", icon=folium.Icon(color="red")).add_to(m)
-
-        # Mostrar incidencias dentro del radio general del subgrafo
-        for inc in incidencias:
-            if "lat" in inc and "lng" in inc:
-                if (distancia_coords(inc["lat"], inc["lng"], y1, x1) < radio) or (distancia_coords(inc["lat"], inc["lng"], y2, x2) < radio):
-                    folium.CircleMarker(
-                        [inc["lat"], inc["lng"]],
-                        radius=6, color="orange", fill=True,
-                        fill_opacity=0.7, tooltip="Incidencia"
-                    ).add_to(m)
-        
-        # Mostrar servicios de emergencia dentro del radio general del subgrafo
-        for s in emergencia:
-            lat = s.get("latitud", s.get("lat"))
-            lon = s.get("longitud", s.get("lng"))
-            if lat and lon:
-                if (distancia_coords(lat, lon, y1, x1) < radio) or (distancia_coords(lat, lon, y2, x2) < radio):
-                    folium.CircleMarker(
-                        [lat, lon],
-                        radius=6, color="purple", fill=True,
-                        fill_opacity=0.7, tooltip=s.get("nombre", "Servicio de emergencia")
-                    ).add_to(m)
-
-
+        ruta = None
+        modo = ""
         pesos_validos = all(criterio in data for _, _, data in G.edges(data=True))
+
         if nx.has_path(G, nodo1, nodo2):
-            ruta = nx.shortest_path(G, nodo1, nodo2, weight=criterio if pesos_validos else None)
-        else:
-            ruta = nx.shortest_path(G.to_undirected(), nodo1, nodo2, weight=criterio if pesos_validos else None)
-
-        st.session_state["ruta"] = ruta
-
-        for u, v in zip(ruta[:-1], ruta[1:]):
-            y_u, x_u = G.nodes[u].get("y"), G.nodes[u].get("x")
-            y_v, x_v = G.nodes[v].get("y"), G.nodes[v].get("x")
-            
-        
-            if None in [y_u, x_u, y_v, x_v]:
-                continue
-        
-            if G.has_edge(u, v):
-                altura = G[u][v].get("altura", 0)
-            elif G.has_edge(v, u):
-                altura = G[v][u].get("altura", 0)
+            if pesos_validos:
+                ruta = nx.shortest_path(G, nodo1, nodo2, weight=criterio)
+                modo = "directed with weight"
             else:
-                altura = 0  # asume seguro si no hay info
-        
-            color = "red" if altura > 0 else "blue"
-            folium.PolyLine([(y_u, x_u), (y_v, x_v)], color=color, weight=5).add_to(m)
-                        # Añadir incidencias cercanas
+                ruta = nx.shortest_path(G, nodo1, nodo2)
+                modo = "directed unweighted"
+        elif nx.has_path(G.to_undirected(), nodo1, nodo2):
+            if pesos_validos:
+                ruta = nx.shortest_path(G.to_undirected(), nodo1, nodo2, weight=criterio)
+                modo = "undirected with weight"
+            else:
+                ruta = nx.shortest_path(G.to_undirected(), nodo1, nodo2)
+                modo = "undirected unweighted"
 
-        
-        if criterio == "altura":
-            altura_total = sum(G[u][v].get("altura", 0) for u, v in zip(ruta[:-1], ruta[1:]) if G.has_edge(u, v))
-            if altura_total > 0:
-                st.warning("⚠️ Some risky segments (with water height > 0) are still present in the route. "
-                           "This may happen when no safer alternative exists to reach your destination.")
+        if ruta:
+            for u, v in zip(ruta[:-1], ruta[1:]):
+                if G.has_edge(u, v):
+                    edge = G[u][v]
+                elif G.has_edge(v, u):
+                    edge = G[v][u]
+                else:
+                    continue
+            
+                color = "red" if edge.get("altura", 0) > 0 else "blue"
+                coords = [(G.nodes[u]["y"], G.nodes[u]["x"]), (G.nodes[v]["y"], G.nodes[v]["x"])]
+                folium.PolyLine(coords, color=color, weight=5).add_to(m)
 
-        st.markdown("### 🗺️ Route Map")
-        st_folium(m, use_container_width=True, height=600)
+            distancia_total = 0
+            tiempo_total = 0
+            aristas_riesgo = 0
+            
+            for u, v in zip(ruta[:-1], ruta[1:]):
+                if G.has_edge(u, v):
+                    edge = G[u][v]
+                elif G.has_edge(v, u):  # fallback en caso de grafo no dirigido
+                    edge = G[v][u]
+                else:
+                    continue  # arista no encontrada
+            
+                distancia_total += edge.get("distancia", 0)
+                tiempo_total += edge.get("tiempo", 0)
+                if edge.get("altura", 0) > 0:
+                    aristas_riesgo += 1
+            nodos_riesgo = sum(1 for n in ruta if G.nodes[n].get("altura", 0) > 0)
+
+            with col1:
+                st.success(f"Route found ({len(ruta)} nodes, {modo})")
+                st.markdown(f"🧶 Optimized criterion: **{criterio}**")
+                st.markdown(f"📏 Total distance: **{distancia_total:.1f} m**")
+                st.markdown(f"⏱️ Estimated time: **{tiempo_total:.0f} seconds**")
+                st.markdown(f"⚠️ Risky segments: **{aristas_riesgo}**")
+
+
+                if "unweighted" in modo:
+                    st.warning("⚠️ The selected criterion was missing in some edges. Used fallback path without weights.")
+
+                p = parking_cercano(y2, x2, st.session_state.parkings)
+                direccion_p = reverse_geocode(p["lat"], p["lon"])
+                folium.Marker([p["lat"], p["lon"]], tooltip=direccion_p, icon=folium.Icon(color="blue", icon="info-sign")).add_to(m)
+
+                if p["is_underground"] == 1 and aristas_riesgo > 0:
+                    st.warning(f"🚨 The nearest parking is underground and there is flood risk. ({direccion_p})")
+                elif p["is_underground"] == 1:
+                    st.info(f"ℹ️ The nearest parking is underground. ({direccion_p})")
+                else:
+                    st.success(f"🄹 The nearest parking is at street level. ({direccion_p})")
 
     except Exception as e:
-        st.error(f"Error while building the map or route: {e}")
+        with col1:
+            st.error(f"Error calculating route: {e}")
+
+    with col2:
+        st_folium(m, use_container_width=True, height=600)
+
+elif st.session_state.error:
+    st.error(st.session_state.error)
