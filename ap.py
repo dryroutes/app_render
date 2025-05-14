@@ -245,32 +245,28 @@ if st.session_state.grafo:
                         break
 
         st.success("Route calculated correctly.")
-
         with col2:
-            st_folium(m, use_container_width=True, height=600)
+            st_folium(m, width=700, height=500, key="map_rendered")
 
         with st.expander("🧾 Route details and download"):
-            distancia_total = sum(G[u][v].get("distancia", 0) for u, v in zip(ruta[:-1], ruta[1:]))
-            tiempo_total = sum(G[u][v].get("tiempo", 0) for u, v in zip(ruta[:-1], ruta[1:]))
-            riesgo = sum(1 for u, v in zip(ruta[:-1], ruta[1:]) if G[u][v].get("altura", 0) > 0)
-            st.write(f"Total distance: {distancia_total:.1f} m")
-            st.write(f"Estimated time: {tiempo_total:.0f} seconds")
-            st.write(f"Risky segments: {riesgo}")
+            distancia_total = sum(G[u][v].get("distancia", 0) for u, v in zip(ruta[:-1], ruta[1:]) if G.has_edge(u, v))
+            tiempo_total = sum(G[u][v].get("tiempo", 0) for u, v in zip(ruta[:-1], ruta[1:]) if G.has_edge(u, v))
+            riesgo = sum(1 for u, v in zip(ruta[:-1], ruta[1:]) if G.has_edge(u, v) and G[u][v].get("altura", 0) > 0)
 
-            # Mapa como imagen
-            st.markdown("**Download route information:**")
-            from selenium import webdriver
-            from selenium.webdriver.chrome.options import Options
-            import base64
-            
-            # Aquí puedes añadir código para renderizar como imagen y descargar
-            import base64
-            from io import BytesIO
-            from streamlit_folium import folium_static
+            st.write(f"📏 Total distance: {distancia_total:.1f} m")
+            st.write(f"⏱️ Estimated time: {tiempo_total:.0f} seconds")
+            st.write(f"⚠️ Risky segments: {riesgo}")
 
-# Guardar el mapa como HTML e imagen
+            # Guardar el mapa como HTML y permitir su descarga
             map_html_path = "map_output.html"
             m.save(map_html_path)
+            with open(map_html_path, "rb") as f:
+                st.download_button(
+                    label="📥 Download map as HTML",
+                    data=f,
+                    file_name="safe_route_map.html",
+                    mime="text/html"
+                )
 
 # Nota: para generar imagen, deberías usar selenium o folium-screenshot desde fuera de Streamlit
 st.download_button(
