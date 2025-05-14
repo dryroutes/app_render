@@ -222,6 +222,7 @@ with col2:
         for u, v in zip(ruta[:-1], ruta[1:]):
             y_u, x_u = G.nodes[u].get("y"), G.nodes[u].get("x")
             y_v, x_v = G.nodes[v].get("y"), G.nodes[v].get("x")
+            
         
             if None in [y_u, x_u, y_v, x_v]:
                 continue
@@ -235,6 +236,38 @@ with col2:
         
             color = "red" if altura > 0 else "blue"
             folium.PolyLine([(y_u, x_u), (y_v, x_v)], color=color, weight=5).add_to(m)
+                        # Añadir incidencias cercanas
+            for inc in incidencias:
+                if "lat" in inc and "lng" in inc:
+                    for n in ruta:
+                        y, x = G.nodes[n]["y"], G.nodes[n]["x"]
+                        if distancia_coords(y, x, inc["lat"], inc["lng"]) < 150:
+                            folium.CircleMarker([inc["lat"], inc["lng"]],
+                                radius=6, color="orange", fill=True,
+                                fill_opacity=0.7, tooltip="Incidencia cercana"
+                            ).add_to(m)
+                            break
+            
+            # Añadir servicios de emergencia cercanos
+            for s in emergencia:
+                lat = s.get("latitud", s.get("lat"))
+                lon = s.get("longitud", s.get("lng"))
+                if lat and lon:
+                    for n in ruta:
+                        y, x = G.nodes[n]["y"], G.nodes[n]["x"]
+                        if distancia_coords(y, x, lat, lon) < 150:
+                            folium.CircleMarker([lat, lon],
+                                radius=6, color="purple", fill=True,
+                                fill_opacity=0.7, tooltip=s.get("nombre", "Servicio de emergencia")
+                            ).add_to(m)
+                            break
+
+        
+        if criterio == "altura":
+            altura_total = sum(G[u][v].get("altura", 0) for u, v in zip(ruta[:-1], ruta[1:]) if G.has_edge(u, v))
+            if altura_total > 0:
+                st.warning("⚠️ Some risky segments (with water height > 0) are still present in the route. "
+                           "This may happen when no safer alternative exists to reach your destination.")
 
         st.markdown("### 🗺️ Route Map")
         st_folium(m, use_container_width=True, height=600)
