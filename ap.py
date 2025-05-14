@@ -265,8 +265,8 @@ if st.session_state.grafo:
             
             # Aquí puedes añadir código para renderizar como imagen y descargar
             import base64
-from io import BytesIO
-from streamlit_folium import folium_static
+            from io import BytesIO
+            from streamlit_folium import folium_static
 
 # Guardar el mapa como HTML e imagen
 map_html_path = "map_output.html"
