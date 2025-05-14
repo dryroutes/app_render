@@ -6,9 +6,11 @@ import folium
 from streamlit_folium import st_folium
 from math import radians, cos, sin, sqrt, atan2
 import gzip
+from PIL import Image
+import io
 
 st.set_page_config(layout="wide")
-st.title("🚶‍♂️ Safe Routes in Valencia")
+st.title("🚶‍♂️ Safe Routes in L'Horta Sud")
 
 st.markdown("""
 <div style="background-color:#f0f0f5; padding:10px; border-radius:8px; margin-bottom:20px; color:#222;">
@@ -37,7 +39,7 @@ criterio = st.selectbox(
     }[x]
 )
 
-for key in ["grafo", "origen_coords", "destino_coords", "nodo1", "nodo2", "error", "nodos", "parkings", "incidencias", "emergencia"]:
+for key in ["grafo", "origen_coords", "destino_coords", "nodo1", "nodo2", "error", "nodos", "parkings", "incidencias", "emergencia", "ruta"]:
     if key not in st.session_state:
         st.session_state[key] = None
 
@@ -77,9 +79,9 @@ def cargar_recursos():
         incidencias = json.load(f2)
         parkings = json.load(f3)
     return emergencia, incidencias, parkings
+
 def penalizar_riesgo(G, emergencia, incidencias):
     puntos = []
-
     for inc in incidencias:
         if "lat" in inc and "lng" in inc:
             puntos.append((inc["lat"], inc["lng"]))
@@ -88,7 +90,6 @@ def penalizar_riesgo(G, emergencia, incidencias):
         lon = s.get("longitud", s.get("lng"))
         if lat and lon:
             puntos.append((lat, lon))
-
     for u, v, data in G.edges(data=True):
         if data.get("altura", 0) > 0:
             y, x = G.nodes[u]["y"], G.nodes[u]["x"]
@@ -98,6 +99,7 @@ def penalizar_riesgo(G, emergencia, incidencias):
                         if k in data:
                             data[k] *= 2
                     break
+
 def parking_cercano(y_dest, x_dest, parkings):
     return min(parkings, key=lambda p: distancia_coords(y_dest, x_dest, p["lat"], p["lon"]))
 
@@ -144,19 +146,19 @@ col1, col2 = st.columns([1, 2])
 
 with col1:
     origenes = [
+        ("Av. País Valencià, Paiporta", 39.42966, -0.41488),
+        ("Calle Picanya, Valencia", 39.46400, -0.40312),
         ("Calle Mayor, Sedaví", 39.42585, -0.38217),
-        ("Av. del Cid, Valencia", 39.47153, -0.40540),
-        ("Calle La Paz, Alzira", 39.15140, -0.43458),
-        ("Avenida de la Estación, Xàtiva", 38.99080, -0.52179),
-        ("Plaza España, Gandía", 38.96811, -0.18389)
+        ("Calle San Vicente, Aldaia", 39.46610, -0.46050),
+        ("Av. del Cid, Valencia", 39.47153, -0.40540)
     ]
 
     destinos = [
         ("Calle Ausiàs March, Catarroja", 39.40470, -0.41512),
-        ("Gran Vía de Ramón y Cajal, Valencia", 39.46650, -0.38690),
-        ("Avenida de Pérez Galdós, Valencia", 39.46671, -0.39889),
-        ("Calle Pintor Benedito, Valencia", 39.46886, -0.37959),
-        ("Plaza Obispo Amigó, Valencia", 39.46734, -0.38625)
+        ("Av. Blasco Ibáñez, Torrent", 39.43794, -0.46526),
+        ("Plaza del Ayuntamiento, Valencia", 39.46994, -0.37629),
+        ("Av. Albufera, Alfafar", 39.42481, -0.38191),
+        ("Calle Valencia, Benetússer", 39.42861, -0.39243)
     ]
 
     sel1 = st.selectbox("📍 Select origin", origenes, index=0, format_func=lambda x: x[0])
@@ -181,6 +183,7 @@ with col1:
                 "parkings": parkings,
                 "incidencias": incidencias,
                 "emergencia": emergencia,
+                "ruta": [],
                 "error": None
             })
         except Exception as e:
@@ -198,29 +201,6 @@ if st.session_state.grafo:
     m = folium.Map(location=[(y1 + y2)/2, (x1 + x2)/2], zoom_start=14)
     folium.Marker([y1, x1], tooltip=reverse_geocode(y1, x1), icon=folium.Icon(color="green")).add_to(m)
     folium.Marker([y2, x2], tooltip=reverse_geocode(y2, x2), icon=folium.Icon(color="red")).add_to(m)
-    for inc in incidencias:
-        if "lat" in inc and "lng" in inc:
-            folium.CircleMarker(
-                location=[inc["lat"], inc["lng"]],
-                radius=6,
-                color="orange",
-                fill=True,
-                fill_opacity=0.7,
-                tooltip=f"Incidencia ({inc.get('nivel', 'Sin nivel')})"
-            ).add_to(m)
-    
-    for s in emergencia:
-        lat = s.get("latitud", s.get("lat"))
-        lon = s.get("longitud", s.get("lng"))
-        if lat and lon:
-            folium.CircleMarker(
-                location=[lat, lon],
-                radius=6,
-                color="purple",
-                fill=True,
-                fill_opacity=0.7,
-                tooltip=s.get("nombre", "Servicio emergencia")
-            ).add_to(m)
 
     try:
         pesos_validos = all(criterio in data for _, _, data in G.edges(data=True))
@@ -228,6 +208,8 @@ if st.session_state.grafo:
             ruta = nx.shortest_path(G, nodo1, nodo2, weight=criterio if pesos_validos else None)
         else:
             ruta = nx.shortest_path(G.to_undirected(), nodo1, nodo2, weight=criterio if pesos_validos else None)
+
+        st.session_state["ruta"] = ruta
 
         for u, v in zip(ruta[:-1], ruta[1:]):
             if G.has_edge(u, v): edge = G[u][v]
@@ -237,12 +219,48 @@ if st.session_state.grafo:
             coords = [(G.nodes[u]["y"], G.nodes[u]["x"]), (G.nodes[v]["y"], G.nodes[v]["x"])]
             folium.PolyLine(coords, color=color, weight=5).add_to(m)
 
+        for inc in incidencias:
+            if "lat" in inc and "lng" in inc:
+                for n in ruta:
+                    y, x = G.nodes[n]["y"], G.nodes[n]["x"]
+                    if distancia_coords(y, x, inc["lat"], inc["lng"]) < 150:
+                        folium.CircleMarker([inc["lat"], inc["lng"]], radius=6, color="orange", fill=True, fill_opacity=0.7, tooltip="Incidencia").add_to(m)
+                        break
+
+        for s in emergencia:
+            lat = s.get("latitud", s.get("lat"))
+            lon = s.get("longitud", s.get("lng"))
+            if lat and lon:
+                for n in ruta:
+                    y, x = G.nodes[n]["y"], G.nodes[n]["x"]
+                    if distancia_coords(y, x, lat, lon) < 150:
+                        folium.CircleMarker([lat, lon], radius=6, color="purple", fill=True, fill_opacity=0.7, tooltip=s.get("nombre", "Servicio emergencia")).add_to(m)
+                        break
+
         st.success("Route calculated correctly.")
+
+        with col2:
+            st_folium(m, use_container_width=True, height=600)
+
+        with st.expander("🧾 Route details and download"):
+            distancia_total = sum(G[u][v].get("distancia", 0) for u, v in zip(ruta[:-1], ruta[1:]))
+            tiempo_total = sum(G[u][v].get("tiempo", 0) for u, v in zip(ruta[:-1], ruta[1:]))
+            riesgo = sum(1 for u, v in zip(ruta[:-1], ruta[1:]) if G[u][v].get("altura", 0) > 0)
+            st.write(f"Total distance: {distancia_total:.1f} m")
+            st.write(f"Estimated time: {tiempo_total:.0f} seconds")
+            st.write(f"Risky segments: {riesgo}")
+
+            # Mapa como imagen
+            st.markdown("**Download route information:**")
+            from selenium import webdriver
+            from selenium.webdriver.chrome.options import Options
+            import base64
+            
+            # Aquí puedes añadir código para renderizar como imagen y descargar
+            st.info("📷 Download of map image requires external rendering (e.g. Selenium or headless browser)")
+
     except Exception as e:
         st.error(f"Error calculating route: {e}")
-
-    with col2:
-        st_folium(m, use_container_width=True, height=600)
 
 elif st.session_state.error:
     st.error(st.session_state.error)
