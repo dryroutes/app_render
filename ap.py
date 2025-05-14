@@ -6,9 +6,11 @@ import folium
 from streamlit_folium import st_folium
 from math import radians, cos, sin, sqrt, atan2
 import gzip
+from PIL import Image
+import io
 
 st.set_page_config(layout="wide")
-st.title("🚶‍♂️ DryRoutes")
+st.title("🚶‍♂️ Safe Routes in L'Horta Sud")
 
 st.markdown("""
 <div style="background-color:#f0f0f5; padding:10px; border-radius:8px; margin-bottom:20px; color:#222;">
@@ -98,6 +100,9 @@ def penalizar_riesgo(G, emergencia, incidencias):
                             data[k] *= 2
                     break
 
+def parking_cercano(y_dest, x_dest, parkings):
+    return min(parkings, key=lambda p: distancia_coords(y_dest, x_dest, p["lat"], p["lon"]))
+
 def cargar_subgrafo(nodo1, nodo2):
     nodos_deseados = set()
     todos_nodos = st.session_state.nodos
@@ -131,5 +136,57 @@ def cargar_subgrafo(nodo1, nodo2):
                             costo_total=a.get("costo_total", 1),
                             altura=a.get("altura_media", 0)
                         )
-
     return G, id_coords
+
+if st.session_state.nodos is None:
+    st.session_state.nodos = cargar_nodos()
+
+col1, col2 = st.columns([1, 2])
+
+with col1:
+    origenes = [
+        ("Av. País Valencià, Paiporta", 39.42966, -0.41488),
+        ("Calle Picanya, Valencia", 39.46400, -0.40312),
+        ("Calle Mayor, Sedaví", 39.42585, -0.38217),
+        ("Calle San Vicente, Aldaia", 39.46610, -0.46050),
+        ("Av. del Cid, Valencia", 39.47153, -0.40540)
+    ]
+
+    destinos = [
+        ("Calle Ausiàs March, Catarroja", 39.40470, -0.41512),
+        ("Av. Blasco Ibáñez, Torrent", 39.43794, -0.46526),
+        ("Plaza del Ayuntamiento, Valencia", 39.46994, -0.37629),
+        ("Av. Albufera, Alfafar", 39.42481, -0.38191),
+        ("Calle Valencia, Benetússer", 39.42861, -0.39243)
+    ]
+
+    sel1 = st.selectbox("📍 Select origin", origenes, index=0, format_func=lambda x: x[0])
+    sel2 = st.selectbox("🌟 Select destination", destinos, index=1, format_func=lambda x: x[0])
+
+    if st.button("Calculate route"):
+        try:
+            lat1, lon1 = sel1[1], sel1[2]
+            lat2, lon2 = sel2[1], sel2[2]
+            nodo1 = nodo_mas_cercano(lat1, lon1, st.session_state.nodos)
+            nodo2 = nodo_mas_cercano(lat2, lon2, st.session_state.nodos)
+            G, id_coords = cargar_subgrafo(nodo1, nodo2)
+            emergencia, incidencias, parkings = cargar_recursos()
+            penalizar_riesgo(G, emergencia, incidencias)
+
+            st.session_state.update({
+                "grafo": G,
+                "origen_coords": (G.nodes[nodo1]["y"], G.nodes[nodo1]["x"]),
+                "destino_coords": (G.nodes[nodo2]["y"], G.nodes[nodo2]["x"]),
+                "nodo1": nodo1,
+                "nodo2": nodo2,
+                "parkings": parkings,
+                "incidencias": incidencias,
+                "emergencia": emergencia,
+                "ruta": [],
+                "error": None
+            })
+        except Exception as e:
+            st.session_state.error = str(e)
+
+if st.session_state.grafo:
+    st.write("Grafo cargado correctamente.")
