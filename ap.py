@@ -194,6 +194,14 @@ with col1:
         incidencias = st.session_state.incidencias
         emergencia = st.session_state.emergencia
 
+        # Penalizar muchísimo las aristas con altura si el criterio es altura o riesgo
+        if criterio in ("altura", "costo_total"):
+            for u, v, data in G.edges(data=True):
+                if data.get("altura", 0) > 0:
+                    if criterio in data:
+                        data[criterio] *= 1000
+
+
         m = folium.Map(location=[(y1 + y2)/2, (x1 + x2)/2], zoom_start=14)
         folium.Marker([y1, x1], tooltip="Origin", icon=folium.Icon(color="green")).add_to(m)
         folium.Marker([y2, x2], tooltip="Destination", icon=folium.Icon(color="red")).add_to(m)
