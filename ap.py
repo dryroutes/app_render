@@ -273,5 +273,3 @@ if st.session_state.grafo:
         # Nota: para generar imagen, deberías usar selenium o folium-screenshot desde fuera de Streamlit
 
 
-elif st.session_state.error:
-    st.error(st.session_state.error)
