@@ -187,9 +187,6 @@ with col1:
             })
         except Exception as e:
             st.session_state.error = str(e)
-
-if st.session_state.grafo:
-    st.write("Grafo cargado correctamente.")
     try:
         G = st.session_state.grafo
         y1, x1 = st.session_state.origen_coords
@@ -219,7 +216,8 @@ if st.session_state.grafo:
                 color = "red" if edge.get("altura", 0) > 0 else "blue"
                 folium.PolyLine([(y_u, x_u), (y_v, x_v)], color=color, weight=5).add_to(m)
 
-        st_folium(m, width=700, height=500)
+        st.markdown("### 🗺️ Route Map")
+        st_folium(m, use_container_width=True, height=600)
 
     except Exception as e:
         st.error(f"Error while building the map or route: {e}")
