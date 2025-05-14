@@ -42,12 +42,21 @@ for key in ["grafo", "origen_coords", "destino_coords", "nodo1", "nodo2", "error
         st.session_state[key] = None
 
 @st.cache_data
+@st.cache_data
 def cargar_nodos():
+    import gzip
     nodos = []
-    for archivo in os.listdir("grafo/nodos"):
-        if archivo.endswith(".json"):
-            with open(f"grafo/nodos/{archivo}") as f:
-                nodos.extend(json.load(f))
+    carpeta = "grafo/nodos"
+    if not os.path.exists(carpeta):
+        st.warning("⚠️ 'grafo/nodos' folder not found.")
+        return nodos
+    for archivo in os.listdir(carpeta):
+        if archivo.endswith(".json.gz"):
+            try:
+                with gzip.open(os.path.join(carpeta, archivo), "rt", encoding="utf-8") as f:
+                    nodos.extend(json.load(f))
+            except Exception as e:
+                st.warning(f"⚠️ Error reading {archivo}: {e}")
     return nodos
 
 def distancia_coords(lat1, lon1, lat2, lon2):
