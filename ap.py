@@ -138,7 +138,7 @@ def cargar_subgrafo(nodo1, nodo2):
                             costo_total=a.get("costo_total", 1),
                             altura=a.get("altura_media", 0)
                         )
-    return G, id_coords
+    return G, id_coords , radio
 
 if st.session_state.nodos is None:
     st.session_state.nodos = cargar_nodos()
@@ -171,7 +171,7 @@ with col1:
             lat2, lon2 = sel2[1], sel2[2]
             nodo1 = nodo_mas_cercano(lat1, lon1, st.session_state.nodos)
             nodo2 = nodo_mas_cercano(lat2, lon2, st.session_state.nodos)
-            G, id_coords = cargar_subgrafo(nodo1, nodo2)
+            G, id_coords,radio = cargar_subgrafo(nodo1, nodo2)
             emergencia, incidencias, parkings = cargar_recursos()
             penalizar_riesgo(G, emergencia, incidencias)
 
