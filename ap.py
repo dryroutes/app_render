@@ -59,6 +59,8 @@ def distancia_coords(lat1, lon1, lat2, lon2):
     return R * c
 
 def nodo_mas_cercano(lat, lon, nodos):
+    if not nodos:
+        raise ValueError("No nodes available to find the nearest node.")
     return min(nodos, key=lambda n: distancia_coords(lat, lon, n["y"], n["x"]))["id"]
 
 def reverse_geocode(lat, lon):
