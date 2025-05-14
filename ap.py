@@ -90,6 +90,7 @@ def penalizar_riesgo(G, emergencia, incidencias):
             puntos.append((lat, lon))
     for u, v, data in G.edges(data=True):
         if data.get("altura", 0) > 0:
+            # Penalización por proximidad a puntos críticos
             y, x = G.nodes[u]["y"], G.nodes[u]["x"]
             for ry, rx in puntos:
                 if distancia_coords(y, x, ry, rx) < 150:
@@ -97,6 +98,9 @@ def penalizar_riesgo(G, emergencia, incidencias):
                         if k in data:
                             data[k] *= 2
                     break
+        # Penalización extrema si el criterio es altura o costo_total
+        if criterio in ["altura", "costo_total"] and data.get("altura", 0) > 0:
+            data[criterio] += 1e6  # Penalización muy fuerte
 
 def parking_cercano(y_dest, x_dest, parkings):
     return min(parkings, key=lambda p: distancia_coords(y_dest, x_dest, p["lat"], p["lon"]))
@@ -139,7 +143,7 @@ def cargar_subgrafo(nodo1, nodo2):
 if st.session_state.nodos is None:
     st.session_state.nodos = cargar_nodos()
 
-col1, col2 = st.columns([1, 2])
+col1, col2 = st.columns([1, 3])
 
 with col1:
     origenes = [
@@ -185,6 +189,7 @@ with col1:
             })
         except Exception as e:
             st.session_state.error = str(e)
+with col2:
     try:
         G = st.session_state.grafo
         y1, x1 = st.session_state.origen_coords
