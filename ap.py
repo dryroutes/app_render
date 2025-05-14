@@ -212,12 +212,19 @@ if st.session_state.grafo:
         st.session_state["ruta"] = ruta
 
         for u, v in zip(ruta[:-1], ruta[1:]):
-            if G.has_edge(u, v): edge = G[u][v]
-            elif G.has_edge(v, u): edge = G[v][u]
-            else: continue
-            color = "red" if edge.get("altura", 0) > 0 else "blue"
-            coords = [(G.nodes[u]["y"], G.nodes[u]["x"]), (G.nodes[v]["y"], G.nodes[v]["x"])]
-            folium.PolyLine(coords, color=color, weight=5).add_to(m)
+            try:
+                if G.has_edge(u, v): edge = G[u][v]
+                elif G.has_edge(v, u): edge = G[v][u]
+                else: continue
+                y_u, x_u = G.nodes[u].get("y"), G.nodes[u].get("x")
+                y_v, x_v = G.nodes[v].get("y"), G.nodes[v].get("x")
+                if y_u is None or x_u is None or y_v is None or x_v is None:
+                    continue
+                color = "red" if edge.get("altura", 0) > 0 else "blue"
+                coords = [(y_u, x_u), (y_v, x_v)]
+                folium.PolyLine(coords, color=color, weight=5).add_to(m)
+            except:
+                continue
 
         for inc in incidencias:
             if "lat" in inc and "lng" in inc:
@@ -257,7 +264,21 @@ if st.session_state.grafo:
             import base64
             
             # Aquí puedes añadir código para renderizar como imagen y descargar
-            st.info("📷 Download of map image requires external rendering (e.g. Selenium or headless browser)")
+            import base64
+from io import BytesIO
+from streamlit_folium import folium_static
+
+# Guardar el mapa como HTML e imagen
+map_html_path = "map_output.html"
+m.save(map_html_path)
+
+# Nota: para generar imagen, deberías usar selenium o folium-screenshot desde fuera de Streamlit
+st.download_button(
+    label="📥 Download map HTML",
+    data=open(map_html_path, "rb"),
+    file_name="safe_route_map.html",
+    mime="text/html"
+)
 
     except Exception as e:
         st.error(f"Error calculating route: {e}")
