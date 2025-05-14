@@ -269,8 +269,8 @@ if st.session_state.grafo:
             from streamlit_folium import folium_static
 
 # Guardar el mapa como HTML e imagen
-map_html_path = "map_output.html"
-m.save(map_html_path)
+            map_html_path = "map_output.html"
+            m.save(map_html_path)
 
 # Nota: para generar imagen, deberías usar selenium o folium-screenshot desde fuera de Streamlit
 st.download_button(
