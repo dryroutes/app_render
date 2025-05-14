@@ -209,12 +209,21 @@ with col1:
         st.session_state["ruta"] = ruta
 
         for u, v in zip(ruta[:-1], ruta[1:]):
+            y_u, x_u = G.nodes[u].get("y"), G.nodes[u].get("x")
+            y_v, x_v = G.nodes[v].get("y"), G.nodes[v].get("x")
+        
+            if None in [y_u, x_u, y_v, x_v]:
+                continue
+        
             if G.has_edge(u, v):
-                edge = G[u][v]
-                y_u, x_u = G.nodes[u]["y"], G.nodes[u]["x"]
-                y_v, x_v = G.nodes[v]["y"], G.nodes[v]["x"]
-                color = "red" if edge.get("altura", 0) > 0 else "blue"
-                folium.PolyLine([(y_u, x_u), (y_v, x_v)], color=color, weight=5).add_to(m)
+                altura = G[u][v].get("altura", 0)
+            elif G.has_edge(v, u):
+                altura = G[v][u].get("altura", 0)
+            else:
+                altura = 0  # asume seguro si no hay info
+        
+            color = "red" if altura > 0 else "blue"
+            folium.PolyLine([(y_u, x_u), (y_v, x_v)], color=color, weight=5).add_to(m)
 
         st.markdown("### 🗺️ Route Map")
         st_folium(m, use_container_width=True, height=600)
