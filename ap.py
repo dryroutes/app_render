@@ -25,8 +25,6 @@ criterio = st.selectbox(
     "🔎 What criterion do you want to optimize for the safest route?",
     options={
         "distancia": "Shortest route (distance)",
-        "tiempo": "Fastest route (time)",
-        "altura": "Route with lowest flood level (water height)",
         "costo_total": "Route with lowest estimated risk"
     },
     format_func=lambda x: {
@@ -176,7 +174,7 @@ with col1:
             
             st.warning(f"🧠 Subgraph loaded: {num_nodos} nodes, {num_aristas} edges.")
             if ejemplo_arista:
-                st.info(f"Example edge data: {ejemplo_arista[2]}")
+                continue
             else:
                 st.error("⚠️ No edges found in the subgraph.")
 
