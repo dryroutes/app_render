@@ -29,8 +29,6 @@ criterio = st.selectbox(
     },
     format_func=lambda x: {
         "distancia": "Shortest route (distance)",
-        "tiempo": "Fastest route (time)",
-        "altura": "Route with lowest flood level (water height)",
         "costo_total": "Route with lowest estimated risk"
     }[x]
 )
