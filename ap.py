@@ -132,7 +132,9 @@ def cargar_subgrafo(nodo1, nodo2):
                         )
 
     return G, id_coords
+# ... [importaciones y configuración inicial idénticos] ...
 
+# 🔁 Carga de nodos
 if st.session_state.nodos is None:
     st.session_state.nodos = cargar_nodos()
 
@@ -165,17 +167,15 @@ with col1:
             nodo1 = nodo_mas_cercano(lat1, lon1, st.session_state.nodos)
             nodo2 = nodo_mas_cercano(lat2, lon2, st.session_state.nodos)
             G, id_coords = cargar_subgrafo(nodo1, nodo2)
-            # 👇 Diagnóstico inmediato
+
             num_nodos = G.number_of_nodes()
             num_aristas = G.number_of_edges()
             ejemplo_arista = next(iter(G.edges(data=True)), None)
-            
-            st.warning(f"🧠 Subgraph loaded: {num_nodos} nodes, {num_aristas} edges.")
-            if ejemplo_arista:
-                pass
-            else:
-                st.error("⚠️ No edges found in the subgraph.")
 
+            st.warning(f"🧠 Subgraph loaded: {num_nodos} nodes, {num_aristas} edges.")
+            if not ejemplo_arista:
+                st.error("⚠️ No edges found in the subgraph.")
+                st.stop()
 
             emergencia, incidencias, parkings = cargar_recursos()
             penalizar_riesgo(G, emergencia, incidencias)
@@ -192,6 +192,7 @@ with col1:
             st.session_state.grafo = None
             st.session_state.error = str(e)
 
+# 🔁 Si ya se ha cargado un grafo y nodos válidos
 if st.session_state.grafo and st.session_state.origen_coords and st.session_state.destino_coords:
     G = st.session_state.grafo
     y1, x1 = st.session_state.origen_coords
@@ -199,8 +200,7 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
     nodo1 = st.session_state.nodo1
     nodo2 = st.session_state.nodo2
 
-    m = folium.Map(location=[(y1 + y2)/2, (x1 + x2)/2], zoom_start=14)
-
+    m = folium.Map(location=[(y1 + y2) / 2, (x1 + x2) / 2], zoom_start=14)
     folium.Marker([y1, x1], tooltip=reverse_geocode(y1, x1), icon=folium.Icon(color="green")).add_to(m)
     folium.Marker([y2, x2], tooltip=reverse_geocode(y2, x2), icon=folium.Icon(color="red")).add_to(m)
 
@@ -223,57 +223,44 @@ if st.session_state.grafo and st.session_state.origen_coords and st.session_stat
             else:
                 ruta = nx.shortest_path(G.to_undirected(), nodo1, nodo2)
                 modo = "undirected unweighted"
+        else:
+            st.error("❌ No path found between origin and destination.")
+            st.stop()
 
-        if ruta:
-            for u, v in zip(ruta[:-1], ruta[1:]):
-                if G.has_edge(u, v):
-                    edge = G[u][v]
-                elif G.has_edge(v, u):
-                    edge = G[v][u]
-                else:
-                    continue
-            
-                color = "red" if edge.get("altura", 0) > 0 else "blue"
-                coords = [(G.nodes[u]["y"], G.nodes[u]["x"]), (G.nodes[v]["y"], G.nodes[v]["x"])]
-                folium.PolyLine(coords, color=color, weight=5).add_to(m)
+        for u, v in zip(ruta[:-1], ruta[1:]):
+            if G.has_edge(u, v):
+                edge = G[u][v]
+            elif G.has_edge(v, u):
+                edge = G[v][u]
+            else:
+                continue
 
-            distancia_total = 0
-            tiempo_total = 0
-            aristas_riesgo = 0
-            
-            for u, v in zip(ruta[:-1], ruta[1:]):
-                if G.has_edge(u, v):
-                    edge = G[u][v]
-                elif G.has_edge(v, u):  # fallback en caso de grafo no dirigido
-                    edge = G[v][u]
-                else:
-                    continue  # arista no encontrada
-            
-                distancia_total += edge.get("distancia", 0)
-                tiempo_total += edge.get("tiempo", 0)
-                if edge.get("altura", 0) > 0:
-                    aristas_riesgo += 1
-            nodos_riesgo = sum(1 for n in ruta if G.nodes[n].get("altura", 0) > 0)
+            color = "red" if edge.get("altura", 0) > 0 else "blue"
+            coords = [(G.nodes[u]["y"], G.nodes[u]["x"]), (G.nodes[v]["y"], G.nodes[v]["x"])]
+            folium.PolyLine(coords, color=color, weight=5).add_to(m)
 
-            with col1:
-                st.success(f"Route found ({len(ruta)} nodes, {modo})")
-                st.markdown(f"📏 Total distance: **{distancia_total:.1f} m**")
-                st.markdown(f"⚠️ Risky segments: **{aristas_riesgo}**")
+        distancia_total = sum(G[u][v].get("distancia", 0) for u, v in zip(ruta[:-1], ruta[1:]) if G.has_edge(u, v))
+        aristas_riesgo = sum(1 for u, v in zip(ruta[:-1], ruta[1:]) if G.has_edge(u, v) and G[u][v].get("altura", 0) > 0)
+        nodos_riesgo = sum(1 for n in ruta if G.nodes[n].get("altura", 0) > 0)
 
+        with col1:
+            st.success(f"Route found ({len(ruta)} nodes, {modo})")
+            st.markdown(f"📏 Total distance: **{distancia_total:.1f} m**")
+            st.markdown(f"⚠️ Risky segments: **{aristas_riesgo}**")
 
-                if "unweighted" in modo:
-                    st.warning("⚠️ The selected criterion was missing in some edges. Used fallback path without weights.")
+            if "unweighted" in modo:
+                st.warning("⚠️ Used fallback path without weights.")
 
-                p = parking_cercano(y2, x2, st.session_state.parkings)
-                direccion_p = reverse_geocode(p["lat"], p["lon"])
-                folium.Marker([p["lat"], p["lon"]], tooltip=direccion_p, icon=folium.Icon(color="blue", icon="info-sign")).add_to(m)
+            p = parking_cercano(y2, x2, st.session_state.parkings)
+            direccion_p = reverse_geocode(p["lat"], p["lon"])
+            folium.Marker([p["lat"], p["lon"]], tooltip=direccion_p, icon=folium.Icon(color="blue", icon="info-sign")).add_to(m)
 
-                if p["is_underground"] == 1 and aristas_riesgo > 0:
-                    st.warning(f"🚨 The nearest parking is underground and there is flood risk. ({direccion_p})")
-                elif p["is_underground"] == 1:
-                    st.info(f"ℹ️ The nearest parking is underground. ({direccion_p})")
-                else:
-                    st.success(f"🄹 The nearest parking is at street level. ({direccion_p})")
+            if p["is_underground"] == 1 and aristas_riesgo > 0:
+                st.warning(f"🚨 The nearest parking is underground and there is flood risk. ({direccion_p})")
+            elif p["is_underground"] == 1:
+                st.info(f"ℹ️ The nearest parking is underground. ({direccion_p})")
+            else:
+                st.success(f"🄹 The nearest parking is at street level. ({direccion_p})")
 
     except Exception as e:
         with col1:
