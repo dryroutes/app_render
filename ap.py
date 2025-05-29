@@ -172,7 +172,7 @@ with col1:
             
             st.warning(f"🧠 Subgraph loaded: {num_nodos} nodes, {num_aristas} edges.")
             if ejemplo_arista:
-                continue
+                pass
             else:
                 st.error("⚠️ No edges found in the subgraph.")
 
